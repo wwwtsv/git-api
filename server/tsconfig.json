@@ -4,7 +4,7 @@
     "module": "commonjs",
     "target": "es2019",
     "outDir": "dist",
-    "rootDir": "./src",
+    "baseUrl": "src",
     "moduleResolution": "node",
     "strict": true,
     "esModuleInterop": true,
@@ -16,6 +16,7 @@
     "src/**/*.ts"
   ],
   "exclude": [
-    "./node_modules"
+    "./node_modules",
+    "tests"
   ]
 }

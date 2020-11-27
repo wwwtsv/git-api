@@ -1,15 +1,16 @@
 {
   "name": "git-api",
   "version": "1.0.0",
-  "main": "src/server.ts",
+  "main": "src/app.ts",
   "license": "MIT",
   "scripts": {
-    "start": "node --inspect=5858 -r ts-node/register ./src/server.ts",
+    "start": "node --inspect=5858 -r ts-node/register src/app.ts",
     "start:watch": "nodemon",
     "build": "tsc",
     "lint": "eslint . --ext .ts"
   },
   "dependencies": {
+    "dotenv": "^8.2.0",
     "express": "^4.17.1"
   },
   "devDependencies": {
@@ -59,13 +60,36 @@
     ],
     "rules": {
       "prettier/prettier": 1,
-      "node/exports-style": ["error", "module.exports"],
-      "node/file-extension-in-import": ["error", "always"],
-      "node/prefer-global/buffer": ["error", "always"],
-      "node/prefer-global/console": ["error", "always"],
-      "node/prefer-global/process": ["error", "always"],
-      "node/prefer-global/url-search-params": ["error", "always"],
-      "node/prefer-global/url": ["error", "always"],
+      "node/no-unsupported-features/es-syntax": 0,
+      "node/no-missing-import": 0,
+      "node/exports-style": [
+        "error",
+        "module.exports"
+      ],
+      "node/file-extension-in-import": [
+        "error",
+        "always"
+      ],
+      "node/prefer-global/buffer": [
+        "error",
+        "always"
+      ],
+      "node/prefer-global/console": [
+        "error",
+        "always"
+      ],
+      "node/prefer-global/process": [
+        "error",
+        "always"
+      ],
+      "node/prefer-global/url-search-params": [
+        "error",
+        "always"
+      ],
+      "node/prefer-global/url": [
+        "error",
+        "always"
+      ],
       "node/prefer-promises/dns": "error",
       "node/prefer-promises/fs": "error"
     },
