@@ -10,6 +10,10 @@
     "lint": "eslint . --ext .ts"
   },
   "dependencies": {
+    "@types/body-parser": "^1.19.0",
+    "@types/cors": "^2.8.8",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1"
   },
@@ -62,13 +66,10 @@
       "prettier/prettier": 1,
       "node/no-unsupported-features/es-syntax": 0,
       "node/no-missing-import": 0,
+      "node/file-extension-in-import": 0,
       "node/exports-style": [
         "error",
         "module.exports"
-      ],
-      "node/file-extension-in-import": [
-        "error",
-        "always"
       ],
       "node/prefer-global/buffer": [
         "error",
