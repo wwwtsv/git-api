@@ -1,4 +1,5 @@
 import dotenv from "dotenv";
+import path from "path";
 const envFound = dotenv.config();
 
 if (envFound.error) {
@@ -10,4 +11,5 @@ export default {
   api: {
     prefix: "/api",
   },
+  repos: path.resolve(__dirname, process.env.PATH_TO_REPO || "services/repos"),
 };

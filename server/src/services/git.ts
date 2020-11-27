@@ -1,9 +1,7 @@
-export default class Git {
-  public async getRepos() {}
-  public async getCommits() {}
-  public async getDiff() {}
-  public async getRepositoryContent() {}
-  public async getFileContent() {}
-  public async deleteRepository() {}
-  public async downloadRepository() {}
-}
+export const getRepos = () => {};
+export const getCommits = () => {};
+export const getDiff = () => {};
+export const getRepositoryContent = () => {};
+export const getFileContent = () => {};
+export const deleteRepository = () => {};
+export const downloadRepository = () => {};

@@ -1,16 +1,92 @@
 import { Router } from "express";
+import {
+  deleteRepository,
+  downloadRepository,
+  getCommits,
+  getDiff,
+  getFileContent,
+  getRepos,
+  getRepositoryContent,
+} from "services/git";
+import config from "config";
 
 const router = Router();
 
 export default (app: Router): void => {
+  const PATH_TO_REPO = config.repos;
   app.use("/repos", router);
   router
-    .get("/")
-    .get("/:repositoryId/commits/:commitHash")
-    .get("/:repositoryId/commits/:branch/:page")
-    .get("/:repositoryId/commits/:commitHash/diff")
-    .get("/:repositoryId(/tree/:commitHash/:path)")
-    .get("/:repositoryId/blob/:commitHash/:pathToFile")
-    .delete("/:repositoryId")
-    .post("/");
+    .get("/", async (req, res, next) => {
+      try {
+        const files = await getRepos(PATH_TO_REPO);
+        res.status(200).json(files);
+      } catch (err) {
+        next(err);
+      }
+    })
+    .get("/:repositoryId/commits/:commitHash", async (req, res, next) => {
+      try {
+        const { repositoryId, commitHash } = req.query;
+        const commits = await getCommits(PATH_TO_REPO, repositoryId, commitHash);
+        res.status(200).json(commits);
+      } catch (err) {
+        next(err);
+      }
+    })
+    .get("/:repositoryId/commits/:commitHash/:page", async (req, res, next) => {
+      try {
+        const { repositoryId, commitHash, page } = req.query;
+        const commits = await getCommits(PATH_TO_REPO, repositoryId, commitHash, page);
+        res.status(200).json(commits);
+      } catch (err) {
+        next(err);
+      }
+    })
+    .get("/:repositoryId/commits/:commitHash/diff", async (req, res, next) => {
+      try {
+        const { repositoryId, commitHash } = req.query;
+        const diff = await getDiff(PATH_TO_REPO, repositoryId, commitHash);
+        res.status(200).json(diff);
+      } catch (err) {
+        next(err);
+      }
+    })
+    /* prettier-ignore */
+    .get("/:repositoryId(/tree/:commitHash/:path([\w]\/?)+)?", async (req, res, next) => {
+      try {
+        const { repositoryId, commitHash, path } = req.query;
+        const repoContent = await getRepositoryContent(PATH_TO_REPO, repositoryId, commitHash, path);
+        res.status(200).json(repoContent);
+      } catch (err) {
+        next(err);
+      }
+    })
+    /* prettier-ignore */
+    .get("/:repositoryId/blob/:commitHash/:pathToFile([\w]\/?)+", async (req, res, next) => {
+      try {
+        const { repositoryId, commitHash, pathToFile } = req.query;
+        const fileContent = await getFileContent(PATH_TO_REPO, repositoryId, commitHash, pathToFile);
+        res.status(200).json(fileContent);
+      } catch (err) {
+        next(err);
+      }
+    })
+    .delete("/:repositoryId", async (req, res, next) => {
+      try {
+        const { repositoryId } = req.query;
+        const deleteRepo = await deleteRepository(PATH_TO_REPO, repositoryId);
+        res.status(200).json(deleteRepo);
+      } catch (err) {
+        next(err);
+      }
+    })
+    .post("/", async (req, res, next) => {
+      try {
+        const { repoUrl } = req.body;
+        const downloadRepo = downloadRepository(PATH_TO_REPO, repoUrl);
+        res.status(200).json(downloadRepo);
+      } catch (err) {
+        next(err);
+      }
+    });
 };

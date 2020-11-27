@@ -63,6 +63,7 @@
       "plugin:node/recommended"
     ],
     "rules": {
+      "no-useless-escape": 0,
       "prettier/prettier": 1,
       "node/no-unsupported-features/es-syntax": 0,
       "node/no-missing-import": 0,
@@ -97,5 +98,8 @@
     "parserOptions": {
       "ecmaVersion": 2020
     }
+  },
+  "prettier": {
+    "printWidth": 120
   }
 }
