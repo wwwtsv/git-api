@@ -7,7 +7,9 @@
     "start": "node --inspect=5858 -r ts-node/register src/app.ts",
     "start:watch": "nodemon",
     "build": "tsc",
-    "lint": "eslint . --ext .ts"
+    "lint": "eslint . --ext .ts",
+    "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' NODE_PATH=./src mocha -r ts-node/register 'tests/**/*.ts'",
+    "test:watch": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' NODE_PATH=./src mocha -r ts-node/register 'tests/**/*.ts' --watch-extensions ts --watch"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
@@ -18,17 +20,21 @@
   },
   "devDependencies": {
     "@types/body-parser": "^1.19.0",
+    "@types/chai": "^4.2.14",
     "@types/cors": "^2.8.8",
     "@types/express": "^4.17.9",
     "@types/lowdb": "^1.0.9",
+    "@types/mocha": "^8.0.4",
     "@types/node": "^14.14.9",
     "@typescript-eslint/eslint-plugin": "^4.8.2",
     "@typescript-eslint/parser": "^4.8.2",
+    "chai": "^4.2.0",
     "eslint": "^7.14.0",
     "eslint-config-prettier": "^6.15.0",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^3.1.4",
+    "mocha": "^8.2.1",
     "nodemon": "^2.0.6",
     "prettier": "^2.2.0",
     "ts-node": "^9.0.0",
@@ -65,6 +71,7 @@
       "plugin:node/recommended"
     ],
     "rules": {
+      "node/no-unpublished-import": 0,
       "no-useless-escape": 0,
       "prettier/prettier": 1,
       "node/no-unsupported-features/es-syntax": 0,

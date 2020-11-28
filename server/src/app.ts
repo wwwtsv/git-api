@@ -24,6 +24,7 @@ const startServer = () => {
     .listen(config.port, () => console.log(`Server is listening on port ${config.port}!`))
     .on("error", (error) => {
       console.error(error);
+      throw new Error(`${error}`);
     });
 };
 
