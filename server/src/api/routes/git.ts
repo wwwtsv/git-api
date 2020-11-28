@@ -52,7 +52,7 @@ export default (app: Router): void => {
       }
     })
     /* prettier-ignore */
-    .get("/:repositoryId(/tree/:commitHash/:path([\w]\/?)+)?", async (req, res, next) => {
+    .get("/:repositoryId(/tree/:commitHash/:path([w]/?)+)?", async (req, res, next) => {
       try {
         const { repositoryId, commitHash, path } = req.query;
         const repoContent = await getRepositoryContent(PATH_TO_REPO, repositoryId, commitHash, path);
@@ -62,7 +62,7 @@ export default (app: Router): void => {
       }
     })
     /* prettier-ignore */
-    .get("/:repositoryId/blob/:commitHash/:pathToFile([\w]\/?)+", async (req, res, next) => {
+    .get("/:repositoryId/blob/:commitHash/:pathToFile([w]/?)+", async (req, res, next) => {
       try {
         const { repositoryId, commitHash, pathToFile } = req.query;
         const fileContent = await getFileContent(PATH_TO_REPO, repositoryId, commitHash, pathToFile);
@@ -83,7 +83,7 @@ export default (app: Router): void => {
     .post("/", async (req, res, next) => {
       try {
         const { repoUrl } = req.body;
-        const downloadRepo = downloadRepository(PATH_TO_REPO, repoUrl);
+        const downloadRepo = await downloadRepository(PATH_TO_REPO, repoUrl);
         res.status(200).json(downloadRepo);
       } catch (err) {
         next(err);

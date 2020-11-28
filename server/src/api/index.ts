@@ -1,5 +1,5 @@
 import { Router } from "express";
-import repo from "./routes/repo";
+import repo from "./routes/git";
 
 export default (): Router => {
   const routes = Router();
