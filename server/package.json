@@ -9,7 +9,7 @@
     "build": "tsc",
     "lint": "eslint . --ext .ts",
     "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' NODE_PATH=./src mocha -r ts-node/register 'tests/**/*.ts'",
-    "test:watch": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' NODE_PATH=./src mocha -r ts-node/register 'tests/**/*.ts' --watch-extensions ts --watch"
+    "test:watch": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' NODE_PATH=./src mocha --require ts-node/register --watch --watch-files src, 'tests/**/*.ts'"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
@@ -44,11 +44,10 @@
     "ignore": [
       "**/*.test.ts",
       "**/*.spec.ts",
-      ".git",
-      "node_modules"
+      "./node_modules"
     ],
     "watch": [
-      "src"
+      "./src"
     ],
     "exec": "yarn start",
     "ext": "ts"
