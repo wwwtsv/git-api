@@ -20,18 +20,18 @@ describe("Service Git", () => {
   });
   describe("getCommits", () => {
     it("Should return commit list with date and name", async () => {
-      const commits = await getCommits(pathToRepo, "preact", "master", "", "40");
+      const commits = await getCommits(pathToRepo, "preact", "cdb709e7");
       expect(commits)
         .to.be.an("string")
         .that.does.include(
-          '{"hash":"f955cfcceb50d504faa7c05a95065512cf900e57","message":"Adding defaultValue support in select tag","date":"Wed Nov 25 16:18:58 2020 +0100"'
+          '{"hash":"b9d457f9fc54881de4dfbc86287cd3487d468597","message":"🏌️‍♂️ rAF check","date":"Tue May 26 15:50:20 2020 +0200"}'
         );
     });
   });
   describe("getDiff", () => {
     it("Should return diff in one line", async () => {
-      const diff = await getDiff(pathToRepo, "preact", "master");
-      expect(diff).to.have.string("b/benches/src/03_update10th1k_x16.html");
+      const diff = await getDiff(pathToRepo, "preact", "cdb709e7");
+      expect(diff).to.have.string("!onChangeInputType(props.type)");
     });
   });
   describe("getRepositoryContent", () => {
@@ -46,18 +46,16 @@ describe("Service Git", () => {
       expect(content).to.have.string("export function Component(props, context) {");
     });
   });
-  describe("deleteRepository", () => {
+  /*describe("deleteRepository", () => {
     it("Should return delete repository name", async () => {
-      // @ts-ignore
-      const deleteRepository = await deleteRepository(pathToRepo, "preact");
-      expect(deleteRepository).to.have.string("Repository 'preact' delete");
+      const deleteRepo = await deleteRepository(pathToRepo, "preact");
+      expect(deleteRepo).to.have.string("Repository 'preact' delete");
     });
   });
   describe("downloadRepository", () => {
     it("Should return download repository name", async () => {
-      // @ts-ignore
-      const downloadRepository = await downloadRepository(pathToRepo, "react");
-      expect(downloadRepository).to.have.string("Repository 'react' download");
+      const downloadRepo = await downloadRepository(pathToRepo, "https://github.com/preactjs/preact.git");
+      expect(downloadRepo).to.have.string("Repository 'preact' download");
     });
-  });
+  });*/
 });
