@@ -7,43 +7,91 @@ export const getRepos = async (path: string): Promise<string[]> => {
   db.set("repos", files);
   return files;
 };
-export const getCommits = (path: string, repoName: string, hash: string, page?: string): Promise<string> => {
+export const getCommits = (
+  path: string,
+  repoName: string,
+  hash: string,
+  page?: string,
+  limit?: string
+): Promise<string> => {
   const param = "^^param^^";
   const line = `^^line^^`;
   const prettyFormat = `%H${param}%b${param}%cd${line}`;
+  const gitLogLimit = limit ? `-n${limit}` : "";
+  return gitAsyncProcess<string>(
+    "git",
+    ["log", gitLogLimit, `--pretty=format:${prettyFormat}`, hash],
+    `${path}/${repoName}`,
+    (result) => {
+      return JSON.stringify(
+        result
+          .split("\n")
+          .join("")
+          .split(line)
+          .filter(Boolean)
+          .map((commit) => {
+            const [hash, message, date] = commit.split(param);
+            return {
+              hash,
+              message,
+              date,
+            };
+          })
+      );
+    }
+  );
+};
+export const getDiff = (path: string, repoName: string, hash: string): Promise<string> => {
+  return gitAsyncProcess<string>("git", ["diff", hash], `${path}/${repoName}`, (result) => {
+    return result;
+  });
+};
+export const getRepositoryContent = (
+  path: string,
+  repoName: string,
+  hash: string,
+  directory?: string
+): Promise<Array<string> | string> => {
+  const pathToFile = directory ? `${hash}:${directory}` : hash;
+  return gitAsyncProcess<Array<string>>(
+    "git",
+    ["ls-tree", "--name-only", pathToFile],
+    `${path}/${repoName}`,
+    (result) => {
+      return result.split("\n");
+    }
+  );
+};
+export const getFileContent = (path: string, repoName: string, hash = "master", fileName?: string): Promise<string> => {
+  const currentFile = fileName ? `${hash}:${fileName}` : hash;
+  return gitAsyncProcess<string>("git", ["show", currentFile], `${path}/${repoName}`, (result) => {
+    return result;
+  });
+};
+export const deleteRepository = (path: string, repoName: string) => {};
+export const downloadRepository = (path: string, url: string) => {};
+
+const gitAsyncProcess = <T>(
+  command = "git",
+  args: Array<string> = [],
+  dir = "",
+  cb: (result: string) => T
+): Promise<T | string> => {
   return new Promise((resolve, reject) => {
-    const log = spawn("git", ["log", "-n40", `--pretty=format:${prettyFormat}`, hash], { cwd: `${path}/${repoName}` });
+    const gitChildProcess = spawn(command, args, { cwd: dir });
     let result = "";
-    log.stdout.on("data", (chunk) => {
-      result += chunk.toString();
+    gitChildProcess.stdout.on("data", (chunk) => {
+      result += chunk;
     });
-    log.on("close", () => {
-      const parseLog = result
-        .replace(/\\\\n/, "")
-        .split("\n")
-        .join("")
-        .split(line)
-        .filter(Boolean)
-        .map((commit) => {
-          const [hash, message, date] = commit.split(param);
-          return {
-            hash,
-            message,
-            date,
-          };
-        });
-      resolve(JSON.stringify(parseLog));
+    gitChildProcess.on("close", () => {
+      const handing = cb(result);
+      resolve(handing);
     });
-    log.stderr.on("data", (data) => {
-      reject(`${data}`);
+    gitChildProcess.stderr.on("error", (err) => {
+      reject(`${err}`);
     });
-    log.on("error", (err) => {
+    gitChildProcess.on("error", (err) => {
       reject(`${err}`);
     });
   });
 };
-export const getDiff = (path: string, repoName: string, hash: string) => {};
-export const getRepositoryContent = (path: string, repoName: string, hash: string, dirictory: string) => {};
-export const getFileContent = (path: string, repoName: string, hash: string, fileName: string) => {};
-export const deleteRepository = (path: string, repoName: string) => {};
-export const downloadRepository = (path: string, url: string) => {};

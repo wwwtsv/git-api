@@ -20,7 +20,7 @@ describe("Service Git", () => {
   });
   describe("getCommits", () => {
     it("Should return commit list with date and name", async () => {
-      const commits = await getCommits(pathToRepo, "preact", "master");
+      const commits = await getCommits(pathToRepo, "preact", "master", "", "40");
       expect(commits)
         .to.be.an("string")
         .that.does.include(
@@ -37,7 +37,7 @@ describe("Service Git", () => {
   describe("getRepositoryContent", () => {
     it("Should return file list", async () => {
       const files = await getRepositoryContent(pathToRepo, "preact", "f955cfcc", "src/");
-      expect(files).to.be.an("array").that.does.include("src/create-element.js");
+      expect(files).to.be.an("array").that.does.include("create-element.js");
     });
   });
   describe("getFileContent", () => {
