@@ -4,7 +4,7 @@
   "main": "src/app.ts",
   "license": "MIT",
   "scripts": {
-    "start": "node --inspect=5858 -r ts-node/register src/app.ts",
+    "start": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' NODE_PATH=./src node --inspect=5858 -r ts-node/register src/app.ts",
     "start:watch": "nodemon",
     "build": "tsc",
     "lint": "eslint . --ext .ts",

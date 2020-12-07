@@ -11,6 +11,6 @@ export default {
   api: {
     prefix: "/api",
   },
-  repos: path.resolve(__dirname, process.env.PATH_TO_REPO || "services/repos"),
+  repos: path.resolve(__dirname, process.env.PATH_TO_REPO || "repos"),
   db: path.resolve(__dirname, "server/db/index.json"),
 };

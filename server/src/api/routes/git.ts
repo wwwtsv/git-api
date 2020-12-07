@@ -51,7 +51,6 @@ export default (app: Router): void => {
         next(err);
       }
     })
-    /* prettier-ignore */
     .get("/:repositoryId(/tree/:commitHash/:path([w]/?)+)?", async (req, res, next) => {
       try {
         const { repositoryId, commitHash, path } = req.query;
@@ -61,7 +60,6 @@ export default (app: Router): void => {
         next(err);
       }
     })
-    /* prettier-ignore */
     .get("/:repositoryId/blob/:commitHash/:pathToFile([w]/?)+", async (req, res, next) => {
       try {
         const { repositoryId, commitHash, pathToFile } = req.query;
