@@ -1,11 +1,9 @@
 import { readdir } from "fs/promises";
 import { spawn } from "child_process";
-import db from "loaders/lowdb";
 import rm from "rimraf";
 
 export const getRepos = async (path: string): Promise<string[]> => {
   const files = await readdir(path);
-  db.set("repos", files);
   return files;
 };
 

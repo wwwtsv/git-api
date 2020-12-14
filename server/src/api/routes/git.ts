@@ -26,17 +26,9 @@ export default (app: Router): void => {
     })
     .get("/:repositoryId/commits/:commitHash", async (req, res, next) => {
       try {
-        const { repositoryId, commitHash } = req.query;
+        const { repositoryId, commitHash } = req.params;
+        console.log(repositoryId, commitHash);
         const commits = await getCommits(PATH_TO_REPO, repositoryId, commitHash);
-        res.status(200).json(commits);
-      } catch (err) {
-        next(err);
-      }
-    })
-    .get("/:repositoryId/commits/:commitHash/:page", async (req, res, next) => {
-      try {
-        const { repositoryId, commitHash, page } = req.query;
-        const commits = await getCommits(PATH_TO_REPO, repositoryId, commitHash, page);
         res.status(200).json(commits);
       } catch (err) {
         next(err);
@@ -44,25 +36,25 @@ export default (app: Router): void => {
     })
     .get("/:repositoryId/commits/:commitHash/diff", async (req, res, next) => {
       try {
-        const { repositoryId, commitHash } = req.query;
+        const { repositoryId, commitHash } = req.params;
         const diff = await getDiff(PATH_TO_REPO, repositoryId, commitHash);
         res.status(200).json(diff);
       } catch (err) {
         next(err);
       }
     })
-    .get("/:repositoryId(/tree/:commitHash/:path([w]/?)+)?", async (req, res, next) => {
+    .get("/:repositoryId(/tree/:commitHash/:path([\w]\/?)+)?", async (req, res, next) => {
       try {
-        const { repositoryId, commitHash, path } = req.query;
+        const { repositoryId, commitHash, path } = req.params;
         const repoContent = await getRepositoryContent(PATH_TO_REPO, repositoryId, commitHash, path);
         res.status(200).json(repoContent);
       } catch (err) {
         next(err);
       }
-    })
-    .get("/:repositoryId/blob/:commitHash/:pathToFile([w]/?)+", async (req, res, next) => {
+    });
+  /*.get("/:repositoryId/blob/:commitHash/:pathToFile([w]/?)+", async (req, res, next) => {
       try {
-        const { repositoryId, commitHash, pathToFile } = req.query;
+        const { repositoryId, commitHash, pathToFile } = req.params;
         const fileContent = await getFileContent(PATH_TO_REPO, repositoryId, commitHash, pathToFile);
         res.status(200).json(fileContent);
       } catch (err) {
@@ -71,7 +63,7 @@ export default (app: Router): void => {
     })
     .delete("/:repositoryId", async (req, res, next) => {
       try {
-        const { repositoryId } = req.query;
+        const { repositoryId } = req.params;
         const deleteRepo = await deleteRepository(PATH_TO_REPO, repositoryId);
         res.status(200).json(deleteRepo);
       } catch (err) {
@@ -86,5 +78,14 @@ export default (app: Router): void => {
       } catch (err) {
         next(err);
       }
-    });
+    });*/
+  /*    .get("/:repositoryId/commits/:commitHash/:perPage", async (req, res, next) => {
+    try {
+      const { repositoryId, commitHash, page } = req.params;
+      const commits = await getCommits(PATH_TO_REPO, repositoryId, commitHash, page);
+      res.status(200).json(commits);
+    } catch (err) {
+      next(err);
+    }
+  });*/
 };
