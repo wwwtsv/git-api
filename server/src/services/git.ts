@@ -53,10 +53,11 @@ export const getRepositoryContent = (
   hash: string,
   directory?: string
 ): Promise<Array<string> | string> => {
-  const pathToFile = directory ? `${hash}:${directory}` : hash;
+  const resolveDirectory = directory ? `${hash}:${directory}` : hash;
+  const resolveBranchName = resolveDirectory || "HEAD";
   return gitAsyncProcess<Array<string>>(
     "git",
-    ["ls-tree", "--name-only", pathToFile],
+    ["ls-tree", "--name-only", resolveBranchName],
     `${path}/${repoName}`,
     (result) => {
       return result.split("\n");

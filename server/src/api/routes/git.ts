@@ -43,7 +43,7 @@ export default (app: Router): void => {
         next(err);
       }
     })
-    .get("/:repositoryId(/tree/:commitHash/:path([\w]\/?)+)?", async (req, res, next) => {
+    .get("/:repositoryId/tree/:commitHash?/:path*?", async (req, res, next) => {
       try {
         const { repositoryId, commitHash, path } = req.params;
         const repoContent = await getRepositoryContent(PATH_TO_REPO, repositoryId, commitHash, path);
@@ -51,8 +51,8 @@ export default (app: Router): void => {
       } catch (err) {
         next(err);
       }
-    });
-  /*.get("/:repositoryId/blob/:commitHash/:pathToFile([w]/?)+", async (req, res, next) => {
+    })
+    .get("/:repositoryId/blob/:commitHash?/:pathToFile*", async (req, res, next) => {
       try {
         const { repositoryId, commitHash, pathToFile } = req.params;
         const fileContent = await getFileContent(PATH_TO_REPO, repositoryId, commitHash, pathToFile);
@@ -78,14 +78,14 @@ export default (app: Router): void => {
       } catch (err) {
         next(err);
       }
-    });*/
-  /*    .get("/:repositoryId/commits/:commitHash/:perPage", async (req, res, next) => {
-    try {
-      const { repositoryId, commitHash, page } = req.params;
-      const commits = await getCommits(PATH_TO_REPO, repositoryId, commitHash, page);
-      res.status(200).json(commits);
-    } catch (err) {
-      next(err);
-    }
-  });*/
+    })
+    .get("/:repositoryId/commits/:commitHash/:perPage", async (req, res, next) => {
+      try {
+        const { repositoryId, commitHash, page } = req.params;
+        const commits = await getCommits(PATH_TO_REPO, repositoryId, commitHash, page);
+        res.status(200).json(commits);
+      } catch (err) {
+        next(err);
+      }
+    });
 };
