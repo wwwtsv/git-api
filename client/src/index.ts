@@ -2,7 +2,12 @@
 import { createApp } from "vue";
 import App from "./App.vue";
 
-const app = createApp(App);
+export const app = createApp(App);
+
+if ("__VUE_DEVTOOLS_GLOBAL_HOOK__" in window) {
+  window.__VUE_DEVTOOLS_GLOBAL_HOOK__.Vue = app;
+}
+
 app.mount("#app");
 
 // Hot Module Replacement (HMR) - Remove this snippet to remove HMR.

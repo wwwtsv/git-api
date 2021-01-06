@@ -7,5 +7,5 @@ module.exports = {
     components: "./src/components",
     "@app": "./src",
   },
-  plugins: ["@snowpack/plugin-typescript", "@snowpack/plugin-vue"],
+  plugins: ["@snowpack/plugin-typescript", "@snowpack/plugin-vue", "@snowpack/plugin-sass"],
 };

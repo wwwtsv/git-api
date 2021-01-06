@@ -20,9 +20,12 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 .App {
   text-align: center;
+  &:before {
+    content: "";
+  }
 }
 .App-header {
   background-color: #f9f6f6;
