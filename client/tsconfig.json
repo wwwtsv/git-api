@@ -1,0 +1,12 @@
+{
+  "include": ["src", "types"],
+  "exclude": ["node_modules"],
+  "compilerOptions": {
+    "module": "ESNext",
+    "target": "ESNext",
+    "strict": true,
+    "baseUrl": "./",
+    "paths": { "*": ["web_modules/.types/*"] },
+    "moduleResolution": "Node"
+  }
+}

@@ -14,6 +14,7 @@ coverage
 
 # Dependency directories
 server/node_modules/
+client/node_modules/
 
 # TypeScript cache
 *.tsbuildinfo
