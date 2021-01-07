@@ -1,19 +1,21 @@
-import { app } from '@app/index'
-import VueRouter, { RouteConfig } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
+import Layout from '@app/components/Layout/index.vue';
 
-app.use(VueRouter);
-
-const routes: RouteConfig[] = [
+const routes = [
   {
-    path: '*',
-    redirect: '/404',
-    meta: { hidden: true }
+    name: 'repositories',
+    path: '/',
+    component: Layout
+  },
+  {
+    path: '/error(.*)*',
+    redirect: '/',
   }
 ]
 
-const createRouter = () => new VueRouter({
-  routes
+const router = createRouter({
+  history: createWebHashHistory(),
+  routes,
 })
 
-const appRouter = createRouter();
-export default appRouter;
+export default router;

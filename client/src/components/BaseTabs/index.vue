@@ -15,13 +15,17 @@
 </template>
 
 <script>
-export default {
+import { defineComponent } from 'vue';
+
+const BaseTabs = defineComponent({
   data() {
     return {
       tabs: ['one', 'two', 'three']
     }
   }
-}
+});
+
+export default BaseTabs;
 </script>
 
 <style scoped>

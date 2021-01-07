@@ -22,13 +22,16 @@
 </template>
 
 <script>
-export default {
+import { defineComponent } from 'vue';
+
+const RepoDropDown = defineComponent({
   data() {
     return {
       repositories: ["Arc", "Arc2", "Etc"],
     };
   },
-};
+})
+export default RepoDropDown;
 </script>
 
 <style scoped></style>

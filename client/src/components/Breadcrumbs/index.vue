@@ -14,13 +14,17 @@
 </template>
 
 <script>
-export default {
+import { defineComponent } from 'vue';
+
+const Breadcrumbs = defineComponent({
   data() {
     return {
       breadcrumbs: ['arcadia', 'api', 'ci']
     }
   }
-};
+});
+
+export default Breadcrumbs
 </script>
 
 <style scoped></style>

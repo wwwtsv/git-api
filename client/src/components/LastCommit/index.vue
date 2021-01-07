@@ -5,7 +5,9 @@
 </template>
 
 <script>
-export default {
+import { defineComponent } from 'vue';
+
+const LastCommit = defineComponent({
   data() {
     return {
       lastCommit: 'q3347435',
@@ -13,7 +15,9 @@ export default {
       lastCommitAuthor: 'robot',
     }
   }
-}
+})
+
+export default LastCommit;
 </script>
 
 <style scoped>

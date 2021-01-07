@@ -5,13 +5,17 @@
 </template>
 
 <script>
-export default {
+import { defineComponent } from 'vue';
+
+const CurrentDirectory = defineComponent({
   data() {
     return {
       branch: 'arcadia'
     }
   }
-}
+})
+
+export default CurrentDirectory
 </script>
 
 <style scoped>

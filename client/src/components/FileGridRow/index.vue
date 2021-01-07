@@ -11,14 +11,24 @@
         class="FileGridRow-Item"
         :class="{folder: key === 'folder'}"
       >
-        {{ value }}
+        <router-link
+          v-if="key === 'commit'"
+          :to="`/commit/${value}`"
+        >
+          {{ value }}
+        </router-link>
+        <div v-else>
+          {{ value }}
+        </div>
       </div>
     </div>
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from 'vue';
+
+const FileGridRow = defineComponent({
   data() {
     return {
       files: [{
@@ -27,10 +37,18 @@ export default {
         message: 'commit message',
         committer: 'Alex',
         updated: '4s ago'
-      }, {}, {}]
+      }, {
+        folder: 'api',
+        commit: '123csadf2',
+        message: 'commit message',
+        committer: 'Alex',
+        updated: '4s ago'
+      }]
     }
   }
-}
+});
+
+export default FileGridRow;
 </script>
 
 <style scoped>

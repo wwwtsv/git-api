@@ -64,7 +64,11 @@
 </template>
 
 <script>
-export default {};
+import { defineComponent } from 'vue';
+
+const BaseLogo = defineComponent({});
+
+export default BaseLogo;
 </script>
 
 <style scoped></style>

@@ -16,14 +16,18 @@
 </template>
 
 <script>
-export default {
+import { defineComponent } from 'vue';
+
+const BranchDropDown = defineComponent({
   data() {
     return {
       branchList: ['thunk', 'master', 'main'],
       currentBranch: 'thunk'
     }
   }
-}
+})
+
+export default BranchDropDown
 </script>
 
 <style scoped>
