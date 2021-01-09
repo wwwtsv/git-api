@@ -30,6 +30,14 @@ const Layout = defineComponent({
 export default Layout
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+.Header {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: max-content;
+  align-items: center;
+  gap: 40px;
+  border-bottom: 1px solid #F0F2F3;
+  padding: 0 34px;
+}
 </style>

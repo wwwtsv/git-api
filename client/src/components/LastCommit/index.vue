@@ -1,6 +1,18 @@
 <template>
   <div class="LastCommit">
-    Last commit {{ lastCommit }} on {{ lastCommitDate }} by {{ lastCommitAuthor }}
+    Last commit <router-link
+      class="LastCommit-Link"
+      :to="{ path: `${lastCommit}` }"
+    >
+      {{ lastCommit }}
+    </router-link> on <router-link
+      class="LastCommit-Link"
+      :to="{ path: `${lastCommitDate}` }"
+    >
+      {{ lastCommitDate }}
+    </router-link> by <div class="LastCommit-Committer">
+      {{ lastCommitAuthor }}
+    </div>
   </div>
 </template>
 
@@ -20,6 +32,20 @@ const LastCommit = defineComponent({
 export default LastCommit;
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+.LastCommit {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: max-content;
+  gap: 3px;
+  color: #000000;
+  &-Link {
+    color: #1774E9;
+  }
+  &-Committer {
+    &:first-letter {
+      color: #FF4F49;
+    }
+  }
+}
 </style>

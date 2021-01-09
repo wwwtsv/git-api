@@ -6,7 +6,7 @@
     "target": "ESNext",
     "strict": true,
     "baseUrl": "./",
-    "paths": { "*": ["web_modules/.types/*"], "@app/*": ["src/*"], "@components": ["src/components/*"] },
+    "paths": { "*": ["web_modules/.types/*"], "@app/*": ["src/*"], "@components/*": ["src/components/*"] },
     "moduleResolution": "Node",
   }
 }

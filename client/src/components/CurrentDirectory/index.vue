@@ -1,7 +1,7 @@
 <template>
-  <div class="CurrentDirectory">
+  <h1 class="CurrentDirectory">
     {{ branch }}
-  </div>
+  </h1>
 </template>
 
 <script>
@@ -18,6 +18,8 @@ const CurrentDirectory = defineComponent({
 export default CurrentDirectory
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+.CurrentDirectory {
+  font-size: 24px;
+}
 </style>

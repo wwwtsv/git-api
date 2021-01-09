@@ -3,9 +3,17 @@ import Layout from '@app/components/Layout/index.vue';
 
 const routes = [
   {
-    name: 'repositories',
+    name: 'Repositories',
     path: '/',
-    component: Layout
+    redirect: '/file-list',
+    component: Layout,
+    children: [
+      {
+        name: 'FileList',
+        path: 'file-list',
+        component: () => import('@app/views/FileList/index.vue')
+      }
+    ]
   },
   {
     path: '/error(.*)*',
