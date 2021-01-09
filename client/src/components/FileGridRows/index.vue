@@ -110,8 +110,10 @@ export default FileGridRows;
     display: grid;
     grid-auto-flow: column;
     justify-content: space-between;
+    padding: 8px 0;
     color: #B8BEC3;
     font-size: 14px;
+    border-bottom: 1px solid #E5E5E5;
   }
 }
 </style>

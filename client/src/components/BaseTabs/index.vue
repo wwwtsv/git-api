@@ -44,6 +44,7 @@ export default BaseTabs;
     margin: 0;
     padding: 0;
     list-style-type: none;
+    border-bottom: 1px solid #E5E5E5;
   }
   &-Elem {
     position: relative;

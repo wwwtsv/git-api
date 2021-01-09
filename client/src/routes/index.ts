@@ -15,10 +15,6 @@ const routes = [
       }
     ]
   },
-  {
-    path: '/error(.*)*',
-    redirect: '/',
-  }
 ]
 
 const router = createRouter({
