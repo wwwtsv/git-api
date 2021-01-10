@@ -8,6 +8,7 @@ import {
   getFileContent,
   deleteRepository,
   downloadRepository,
+  getLogForRepositoryContent,
 } from "../../src/services/git";
 
 describe("Service Git", () => {
@@ -24,7 +25,7 @@ describe("Service Git", () => {
       expect(commits)
         .to.be.an("string")
         .that.does.include(
-          '{"hash":"b9d457f9fc54881de4dfbc86287cd3487d468597","message":"🏌️‍♂️ rAF check","date":"Tue May 26 15:50:20 2020 +0200"}'
+          '{"hash":"9a422017fec6dab287c77c3aef63c7b2fef0c7e1","message":"🏌️‍♂️ rAF check","date":"Tue May 26 09:38:28 2020 -0400"}'
         );
     });
   });
@@ -36,8 +37,18 @@ describe("Service Git", () => {
   });
   describe("getRepositoryContent", () => {
     it("Should return file list", async () => {
-      const files = await getRepositoryContent(pathToRepo, "preact", "f955cfcc", "src/");
+      const files = await getRepositoryContent(pathToRepo, "preact", "f955cfcc:src/");
       expect(files).to.be.an("array").that.does.include("create-element.js");
+    });
+  });
+  describe("getLogForRepositoryContent", () => {
+    it("Should return git log for repository content", async () => {
+      const logForRepo = await getLogForRepositoryContent(pathToRepo, "preact", "src", ["options.js"]);
+      expect(logForRepo).to.be.an("array").to.deep.include({
+        name: "options.js",
+        meta:
+          '{"hash":"6e6bf387","message":"refactor vnodeId to live on options","committer":"Jovi De Croock","date":"Sun Nov 1 22:28:50 2020 +0100"}',
+      });
     });
   });
   describe("getFileContent", () => {

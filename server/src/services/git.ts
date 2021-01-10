@@ -2,34 +2,29 @@ import { readdir } from "fs/promises";
 import { spawn } from "child_process";
 import rm from "rimraf";
 
+const PARAM = "^^param^^";
+const LINE = "^^line^^";
+
 export const getRepos = async (path: string): Promise<string[]> => {
   const files = await readdir(path);
   return files;
 };
 
-export const getCommits = (
-  path: string,
-  repoName: string,
-  hash: string,
-  page?: string,
-  limit?: string
-): Promise<string> => {
-  const param = "^^param^^";
-  const line = `^^line^^`;
-  const prettyFormat = `%H${param}%b${param}%cd${line}`;
+export const getCommits = (path: string, repoName: string, hash: string, limit = 0): Promise<string> => {
+  const prettyFormat = `%H${PARAM}%B${PARAM}%cd${LINE}`;
+  const commitsPerPage = limit ? `-n ${limit}` : `-n 1000`;
   return gitAsyncProcess<string>(
     "git",
-    ["log", `--pretty=format:${prettyFormat}`, hash],
+    ["log", commitsPerPage, `--pretty=format:${prettyFormat}`, hash],
     `${path}/${repoName}`,
     (result) => {
       return JSON.stringify(
         result
           .split("\n")
           .join("")
-          .split(line)
-          .filter(Boolean)
+          .split(LINE)
           .map((commit) => {
-            const [hash, message, date] = commit.split(param);
+            const [hash, message, date] = commit.split(PARAM);
             return {
               hash,
               message,
@@ -47,22 +42,58 @@ export const getDiff = (path: string, repoName: string, hash: string): Promise<s
   });
 };
 
-export const getRepositoryContent = (
+export const getRepositoryContent = (path: string, repoName: string, hash: string): Promise<Array<string> | string> => {
+  return gitAsyncProcess<Array<string>>("git", ["ls-tree", "--name-only", hash], `${path}/${repoName}`, (result) => {
+    return result.split("\n");
+  });
+};
+
+export const getLogForRepositoryContent = async (
   path: string,
   repoName: string,
-  hash: string,
-  directory?: string
-): Promise<Array<string> | string> => {
-  const resolveDirectory = directory ? `${hash}:${directory}` : hash;
-  const resolveBranchName = resolveDirectory || "HEAD";
-  return gitAsyncProcess<Array<string>>(
-    "git",
-    ["ls-tree", "--name-only", resolveBranchName],
-    `${path}/${repoName}`,
-    (result) => {
-      return result.split("\n");
-    }
+  pathToFile: string,
+  fileList: Array<string>
+): Promise<Array<{ name: string; meta: string }>> => {
+  const prettyFormat = `%h${PARAM}%B${PARAM}%cn${PARAM}%cd${LINE}`;
+  console.log(pathToFile);
+  const getFilesMeta = await Promise.all(
+    fileList.map(async (file: string) => {
+      return gitAsyncProcess(
+        "git",
+        ["log", "-n 1", `--pretty=format:${prettyFormat}`, `${pathToFile}${file}`],
+        `${path}/${repoName}`,
+        (result) => {
+          return JSON.stringify(
+            result
+              .split("\n")
+              .join("")
+              .split(LINE)
+              .slice(0, 1)
+              .map((commit) => {
+                const [hash, message, committer, date] = commit.split(PARAM);
+                return {
+                  hash,
+                  message,
+                  committer,
+                  date,
+                };
+              })[0]
+          );
+        }
+      );
+    })
   );
+  return new Promise((resolve, reject) => {
+    try {
+      const fileData = fileList.map((file, index) => ({
+        name: file,
+        meta: getFilesMeta[index],
+      }));
+      resolve(fileData);
+    } catch (e) {
+      reject(e);
+    }
+  });
 };
 
 export const getFileContent = (path: string, repoName: string, hash = "master", fileName?: string): Promise<string> => {
@@ -106,7 +137,7 @@ export const downloadRepository = (path: string, url: string): Promise<string> =
 
 const gitAsyncProcess = <T>(
   command = "git",
-  args: Array<string> = [],
+  args: Array<string> = [""],
   dir = "",
   middleware: (result: string) => T
 ): Promise<T | string> => {

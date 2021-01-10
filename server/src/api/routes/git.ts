@@ -5,6 +5,7 @@ import {
   getCommits,
   getDiff,
   getFileContent,
+  getLogForRepositoryContent,
   getRepos,
   getRepositoryContent,
 } from "services/git";
@@ -27,7 +28,6 @@ export default (app: Router): void => {
     .get("/:repositoryId/commits/:commitHash", async (req, res, next) => {
       try {
         const { repositoryId, commitHash } = req.params;
-        console.log(repositoryId, commitHash);
         const commits = await getCommits(PATH_TO_REPO, repositoryId, commitHash);
         res.status(200).json(commits);
       } catch (err) {
@@ -46,8 +46,21 @@ export default (app: Router): void => {
     .get("/:repositoryId/tree/:commitHash?/:path*?", async (req, res, next) => {
       try {
         const { repositoryId, commitHash, path } = req.params;
-        const repoContent = await getRepositoryContent(PATH_TO_REPO, repositoryId, commitHash, path);
-        res.status(200).json(repoContent);
+        const resolveDirectory = path ? `${commitHash}:${path}` : commitHash;
+        const resolveBranchName = resolveDirectory || "HEAD";
+        const resolvePath = path || "./";
+        const repositoryContent = (await getRepositoryContent(
+          PATH_TO_REPO,
+          repositoryId,
+          resolveBranchName
+        )) as string[];
+        const gitLogForFiles = await getLogForRepositoryContent(
+          PATH_TO_REPO,
+          repositoryId,
+          resolvePath,
+          repositoryContent
+        );
+        res.status(200).json(gitLogForFiles);
       } catch (err) {
         next(err);
       }
@@ -81,8 +94,8 @@ export default (app: Router): void => {
     })
     .get("/:repositoryId/commits/:commitHash/:perPage", async (req, res, next) => {
       try {
-        const { repositoryId, commitHash, page } = req.params;
-        const commits = await getCommits(PATH_TO_REPO, repositoryId, commitHash, page);
+        const { repositoryId, commitHash } = req.params;
+        const commits = await getCommits(PATH_TO_REPO, repositoryId, commitHash);
         res.status(200).json(commits);
       } catch (err) {
         next(err);
