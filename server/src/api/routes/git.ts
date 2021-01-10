@@ -28,7 +28,9 @@ export default (app: Router): void => {
     .get("/:repositoryId/commits/:commitHash", async (req, res, next) => {
       try {
         const { repositoryId, commitHash } = req.params;
-        const commits = await getCommits(PATH_TO_REPO, repositoryId, commitHash);
+        const { perPage } = req.query;
+        const resolvePerPage = perPage ? `${perPage}` : '10';
+        const commits = await getCommits(PATH_TO_REPO, repositoryId, commitHash, resolvePerPage);
         res.status(200).json(commits);
       } catch (err) {
         next(err);
@@ -92,13 +94,4 @@ export default (app: Router): void => {
         next(err);
       }
     })
-    .get("/:repositoryId/commits/:commitHash/:perPage", async (req, res, next) => {
-      try {
-        const { repositoryId, commitHash } = req.params;
-        const commits = await getCommits(PATH_TO_REPO, repositoryId, commitHash);
-        res.status(200).json(commits);
-      } catch (err) {
-        next(err);
-      }
-    });
 };

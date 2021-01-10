@@ -10,7 +10,7 @@ export const getRepos = async (path: string): Promise<string[]> => {
   return files;
 };
 
-export const getCommits = (path: string, repoName: string, hash: string, limit = 0): Promise<string> => {
+export const getCommits = (path: string, repoName: string, hash: string, limit = ''): Promise<string> => {
   const prettyFormat = `%H${PARAM}%B${PARAM}%cd${LINE}`;
   const commitsPerPage = limit ? `-n ${limit}` : `-n 1000`;
   return gitAsyncProcess<string>(
