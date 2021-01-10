@@ -48,7 +48,7 @@ export default (app: Router): void => {
         const { repositoryId, commitHash, path } = req.params;
         const resolveDirectory = path ? `${commitHash}:${path}` : commitHash;
         const resolveBranchName = resolveDirectory || "HEAD";
-        const resolvePath = path || "./";
+        const resolvePath = `${path}/` || "./";
         const repositoryContent = (await getRepositoryContent(
           PATH_TO_REPO,
           repositoryId,

@@ -55,7 +55,6 @@ export const getLogForRepositoryContent = async (
   fileList: Array<string>
 ): Promise<Array<{ name: string; meta: string }>> => {
   const prettyFormat = `%h${PARAM}%B${PARAM}%cn${PARAM}%cd${LINE}`;
-  console.log(pathToFile);
   const getFilesMeta = await Promise.all(
     fileList.map(async (file: string) => {
       return gitAsyncProcess(

@@ -43,7 +43,7 @@ describe("Service Git", () => {
   });
   describe("getLogForRepositoryContent", () => {
     it("Should return git log for repository content", async () => {
-      const logForRepo = await getLogForRepositoryContent(pathToRepo, "preact", "src", ["options.js"]);
+      const logForRepo = await getLogForRepositoryContent(pathToRepo, "preact", "src/", ["options.js"]);
       expect(logForRepo).to.be.an("array").to.deep.include({
         name: "options.js",
         meta:
