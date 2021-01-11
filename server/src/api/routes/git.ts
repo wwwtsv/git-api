@@ -70,7 +70,7 @@ export default (app: Router): void => {
     .get("/:repositoryId/blob/:commitHash?/:pathToFile*", async (req, res, next) => {
       try {
         const { repositoryId, commitHash, pathToFile } = req.params;
-        const fileContent = await getFileContent(PATH_TO_REPO, repositoryId, commitHash, pathToFile);
+        const fileContent = await getFileContent(PATH_TO_REPO, repositoryId, commitHash, `${pathToFile}${req.params[0]}`);
         res.status(200).json(fileContent);
       } catch (err) {
         next(err);
