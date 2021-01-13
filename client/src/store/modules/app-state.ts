@@ -1,4 +1,4 @@
-import { Module } from "vuex";
+import { ActionTree, Module, MutationTree } from "vuex";
 import {
   getCommitList,
   getDiff,
@@ -18,9 +18,8 @@ import {
   IGetRepositoryData,
   AppState,
 } from "@app/store/modules/types/app-state";
-import { RootState } from "@app/store";
 
-const appAppState: Module<AppState, RootState> = {
+const appAppState: Module<AppState, AppState> = {
   state: (): AppState => ({
     device: DeviceType.Desktop,
     fileList: [],
@@ -59,11 +58,11 @@ const appAppState: Module<AppState, RootState> = {
     DOWNLOAD_REPOSITORY: (state: AppState, payload: Array<string>): void => {
       state.repositoryList = payload;
     },
-  },
+  } as MutationTree<AppState>,
   actions: {
     GetRepositoryList: async ({ commit }: Context): Promise<void> => {
       const repoList = await getRepositoryList();
-      commit(MutationTypes.SET_REPOSITORIES_LIST, repoList);
+      commit(MutationTypes.SET_REPOSITORIES_LIST, repoList.data);
     },
     GetCommitList: async ({ commit }: Context, { repo, hash, perPage }: IGetCommit): Promise<void> => {
       const commitList = await getCommitList(repo, hash, perPage);
@@ -101,7 +100,7 @@ const appAppState: Module<AppState, RootState> = {
         commit(MutationTypes.ERROR_DOWNLOAD, `${downloadRepository}`);
       }
     },
-  },
+  } as ActionTree<AppState, AppState>,
 };
 
 export default appAppState;

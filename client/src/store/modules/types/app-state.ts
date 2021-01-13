@@ -1,5 +1,4 @@
 import { ActionContext } from "vuex";
-import { RootState } from "@app/store";
 
 export const enum MutationTypes {
   SET_DEVICE = "SET_DEVICE",
@@ -20,7 +19,7 @@ export enum DeviceType {
   Mobile,
   Desktop,
 }
-export type Context = ActionContext<AppState, RootState>;
+export type Context = ActionContext<AppState, AppState>;
 
 export interface IGetCommit {
   repo: string;

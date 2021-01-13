@@ -4,7 +4,13 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-export default defineComponent({});
+import { useStore } from "@app/store";
+export default defineComponent({
+  setup() {
+    const store = useStore();
+    store.dispatch("GetRepositoryList");
+  },
+});
 </script>
 
 <style lang="scss">

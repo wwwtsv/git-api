@@ -1,6 +1,6 @@
 <template>
   <div class="RepoDropDown" :class="{ active: isActive }">
-    <button class="RepoDropDown-Button">
+    <button class="RepoDropDown-Button" @click="isOpen = !isOpen">
       <span class="RepoDropDown-BoldText">Repository</span> {{ currentRepository }}
     </button>
     <ul v-if="isOpen" class="RepoDropDown-List">
@@ -11,16 +11,18 @@
   </div>
 </template>
 
-<script>
-import { defineComponent } from "vue";
+<script lang="ts">
+import { defineComponent, ref } from "vue";
+import { useStore } from "@app/store";
 
 export default defineComponent({
-  data() {
+  setup() {
+    const isOpen = ref(false);
+    const { currentRepository, repositoryList } = useStore().state.appState;
     return {
-      repositories: ["Arc", "Arc2", "Etc"],
-      currentRepository: "Arc",
-      isActive: false,
-      isOpen: false,
+      currentRepository,
+      repositoryList,
+      isOpen,
     };
   },
 });
