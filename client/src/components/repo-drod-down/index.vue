@@ -1,20 +1,10 @@
 <template>
-  <div
-    class="RepoDropDown"
-    :class="{active: isActive}"
-  >
+  <div class="RepoDropDown" :class="{ active: isActive }">
     <button class="RepoDropDown-Button">
       <span class="RepoDropDown-BoldText">Repository</span> {{ currentRepository }}
     </button>
-    <ul
-      v-if="isOpen"
-      class="RepoDropDown-List"
-    >
-      <li
-        v-for="(repo, index) in repositories"
-        :key="index"
-        class="RepoDropDown-Elem"
-      >
+    <ul v-if="isOpen" class="RepoDropDown-List">
+      <li v-for="(repo, index) in repositories" :key="index" class="RepoDropDown-Elem">
         {{ repo }}
       </li>
     </ul>
@@ -22,19 +12,18 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent } from "vue";
 
-const RepoDropDown = defineComponent({
+export default defineComponent({
   data() {
     return {
       repositories: ["Arc", "Arc2", "Etc"],
-      currentRepository: 'Arc',
+      currentRepository: "Arc",
       isActive: false,
       isOpen: false,
     };
   },
-})
-export default RepoDropDown;
+});
 </script>
 
 <style lang="scss" scoped>
@@ -47,16 +36,16 @@ export default RepoDropDown;
     background: none;
     cursor: pointer;
     &:after {
-      content: '';
+      content: "";
       position: absolute;
       bottom: 0;
       left: 0;
       width: 100%;
       height: 3px;
-      background: #FF4F49;
+      background: #ff4f49;
     }
     &:before {
-      content: '';
+      content: "";
       position: absolute;
       top: 0;
       bottom: 0;
@@ -68,7 +57,7 @@ export default RepoDropDown;
       border-width: 5px 5px 0 5px;
       border-color: #060708 transparent transparent transparent;
     }
-   }
+  }
   &-BoldText {
     font-weight: bold;
   }

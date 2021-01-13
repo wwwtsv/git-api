@@ -1,25 +1,25 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
-import Layout from '@app/components/Layout/index.vue';
+import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
+import Layout from "@app/components/layout/index.vue";
 
-const routes = [
+const routes: Array<RouteRecordRaw> = [
   {
-    name: 'Repositories',
-    path: '/',
-    redirect: '/file-list',
+    name: "repositories",
+    path: "/",
+    redirect: "/file-list",
     component: Layout,
     children: [
       {
-        name: 'FileList',
-        path: 'file-list',
-        component: () => import('@app/views/FileList/index.vue')
-      }
-    ]
+        name: "file-list",
+        path: "file-list",
+        component: () => import("@app/views/file-list/index.vue"),
+      },
+    ],
   },
-]
+];
 
 const router = createRouter({
   history: createWebHashHistory(),
   routes,
-})
+});
 
 export default router;

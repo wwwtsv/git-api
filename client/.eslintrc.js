@@ -1,15 +1,19 @@
 module.exports = {
-  parser: 'vue-eslint-parser',
+  parser: "vue-eslint-parser",
   parserOptions: {
-    parser: '@typescript-eslint/parser'
+    parser: "@typescript-eslint/parser",
   },
-  plugins: [
-    '@typescript-eslint',
-  ],
+  plugins: ["@typescript-eslint"],
   extends: [
-    'eslint:recommended',
-    'plugin:vue/vue3-recommended',
-    'plugin:@typescript-eslint/recommended',
+    "eslint:recommended",
+    "plugin:vue/vue3-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier",
+    "prettier/vue",
+    "prettier/@typescript-eslint",
   ],
-  rules: {}
-}
+  rules: {
+    "vue/html-indent": "off",
+    "@typescript-eslint/ban-ts-comment": "off",
+  },
+};

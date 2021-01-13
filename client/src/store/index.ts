@@ -1,17 +1,17 @@
-import { InjectionKey } from 'vue'
-import { createStore, Store } from "vuex";
-import appState, { AppState } from "@app/store/modules/app";
+import { InjectionKey } from "vue";
+import { createStore, Store as VuexStore } from "vuex";
+import appState from "@app/store/modules/app-state";
 
-interface State {
-  appState: AppState
+export interface RootState {
+  version: string;
 }
 
-export const key: InjectionKey<Store<State>> = Symbol()
+export const key: InjectionKey<VuexStore<RootState>> = Symbol();
 
-const store = createStore<State>({
+const store = createStore<RootState>({
   modules: {
-    appState
-  }
+    appState,
+  },
 });
 
 export default store;

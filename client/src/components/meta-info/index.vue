@@ -6,11 +6,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent } from "vue";
 
-const MetaInfo = defineComponent({});
-
-export default MetaInfo;
+export default defineComponent({});
 </script>
 
 <style lang="scss" scoped>
@@ -19,8 +17,8 @@ export default MetaInfo;
   grid-auto-flow: column;
   justify-content: space-between;
   padding: 18px 20px;
-  border-top: 1px solid #F0F2F3;
-  color: #7F8285;
+  border-top: 1px solid #f0f2f3;
+  color: #7f8285;
   font-size: 13px;
 }
 </style>

@@ -3,15 +3,8 @@
     <button class="BranchDropDown-Button">
       {{ currentBranch }}
     </button>
-    <ul
-      v-if="isOpen"
-      class="BranchDropDown-List"
-    >
-      <li
-        v-for="(branch, index) in branchList"
-        :key="index"
-        class="BranchDropDown-Elem"
-      >
+    <ul v-if="isOpen" class="BranchDropDown-List">
+      <li v-for="(branch, index) in branchList" :key="index" class="BranchDropDown-Elem">
         {{ branch }}
       </li>
     </ul>
@@ -19,19 +12,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent } from "vue";
 
-const BranchDropDown = defineComponent({
+export default defineComponent({
   data() {
     return {
-      branchList: ['thunk', 'master', 'main'],
-      currentBranch: 'thunk',
+      branchList: ["thunk", "master", "main"],
+      currentBranch: "thunk",
       isOpen: false,
-    }
-  }
-})
-
-export default BranchDropDown
+    };
+  },
+});
 </script>
 
 <style lang="scss" scoped>
@@ -43,10 +34,10 @@ export default BranchDropDown
     margin: 0;
     border: none;
     background: none;
-    color: #7F8285;
+    color: #7f8285;
     cursor: pointer;
     &:before {
-      content: '';
+      content: "";
       position: absolute;
       top: 0;
       bottom: 0;
@@ -56,7 +47,7 @@ export default BranchDropDown
       margin: auto;
       border-style: solid;
       border-width: 5px 5px 0 5px;
-      border-color: #7F8285 transparent transparent transparent;
+      border-color: #7f8285 transparent transparent transparent;
     }
   }
 }

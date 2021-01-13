@@ -16,17 +16,18 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent } from "vue";
 
-const BaseTabs = defineComponent({
+export default defineComponent({
   data() {
     return {
-      tabs: [{ name: 'Files', isActive: true}, { name: 'Branches', isActive: false}]
-    }
-  }
+      tabs: [
+        { name: "Files", isActive: true },
+        { name: "Branches", isActive: false },
+      ],
+    };
+  },
 });
-
-export default BaseTabs;
 </script>
 
 <style lang="scss" scoped>
@@ -44,23 +45,23 @@ export default BaseTabs;
     margin: 0;
     padding: 0;
     list-style-type: none;
-    border-bottom: 1px solid #E5E5E5;
+    border-bottom: 1px solid #e5e5e5;
   }
   &-Elem {
     position: relative;
     cursor: pointer;
-    color: #7F8285;
+    color: #7f8285;
     font-size: 16px;
     text-transform: uppercase;
     &_active {
       color: #000;
       &:before {
-        content: '';
+        content: "";
         position: absolute;
         bottom: 0;
         width: 100%;
         height: 3px;
-        background: #FF4F49;
+        background: #ff4f49;
       }
     }
   }

@@ -1,15 +1,8 @@
 <template>
   <div class="Breadcrumbs">
     <ul class="Breadcrumbs-List">
-      <li
-        v-for="(elem, index) in breadcrumbs"
-        :key="index"
-        class="Breadcrumbs-Elem"
-      >
-        <router-link
-          class="Breadcrumbs-Link"
-          :to="{ path: `/${elem}` }"
-        >
+      <li v-for="(elem, index) in breadcrumbs" :key="index" class="Breadcrumbs-Elem">
+        <router-link class="Breadcrumbs-Link" :to="{ path: `/${elem}` }">
           {{ elem }}
         </router-link>
       </li>
@@ -18,24 +11,22 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent } from "vue";
 
-const Breadcrumbs = defineComponent({
+export default defineComponent({
   data() {
     return {
-      breadcrumbs: ['arcadia', 'api', 'ci']
-    }
-  }
+      breadcrumbs: ["arcadia", "api", "ci"],
+    };
+  },
 });
-
-export default Breadcrumbs
 </script>
 
 <style lang="scss" scoped>
 .Breadcrumbs {
   padding-top: 14px;
   padding-bottom: 14px;
-  border-bottom: 1px solid #E5E5E5;
+  border-bottom: 1px solid #e5e5e5;
   &-List {
     display: grid;
     grid-auto-flow: column;
@@ -48,7 +39,7 @@ export default Breadcrumbs
     position: relative;
     margin-right: 36px;
     &:before {
-      content: '/';
+      content: "/";
       position: absolute;
       top: 0;
       bottom: 0;
@@ -64,7 +55,7 @@ export default Breadcrumbs
   }
   &-Link {
     text-decoration: none;
-    color: #7F8285;
+    color: #7f8285;
     transition: ease 0.2s;
     &:hover {
       color: #000;

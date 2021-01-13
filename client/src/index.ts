@@ -3,7 +3,7 @@
 import { createApp } from "vue";
 import router from '@app/routes/index';
 import store, { key } from '@app/store/index';
-import App from "@app/App.vue";
+import App from "@app/app.vue";
 
 export const app = createApp(App);
 

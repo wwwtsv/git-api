@@ -15,24 +15,22 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import Breadcrumbs from '@components/Breadcrumbs/index.vue'
-import CurrentDirectory from '@components/CurrentDirectory/index.vue'
-import BranchDropDown from '@components/BranchDropDown/index.vue'
-import FileGrid from '@components/FileGrid/index.vue'
-import LastCommit from '@components/LastCommit/index.vue'
+import { defineComponent } from "vue";
+import Breadcrumbs from "@components/breadcrumbs/index.vue";
+import CurrentDirectory from "@components/current-dirictory/index.vue";
+import BranchDropDown from "@components/branch-drop-down/index.vue";
+import FileGrid from "@components/file-grid/index.vue";
+import LastCommit from "@components/last-commit/index.vue";
 
-const FileList = defineComponent({
+export default defineComponent({
   components: {
     Breadcrumbs,
     CurrentDirectory,
     BranchDropDown,
     FileGrid,
-    LastCommit
-  }
-})
-
-export default FileList;
+    LastCommit,
+  },
+});
 </script>
 
 <style lang="scss" scoped>

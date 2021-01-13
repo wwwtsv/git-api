@@ -14,20 +14,18 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import BaseLogo from '@components/BaseLogo/index.vue'
-import RepoDropDown from '@components/RepoDropDown/index.vue'
-import MetaInfo from '@components/MetaInfo/index.vue'
+import { defineComponent } from "vue";
+import BaseLogo from "@components/base-logo/index.vue";
+import RepoDropDown from "@components/repo-drod-down/index.vue";
+import MetaInfo from "@components/meta-info/index.vue";
 
-const Layout = defineComponent({
+export default defineComponent({
   components: {
     BaseLogo,
     RepoDropDown,
-    MetaInfo
-  }
-})
-
-export default Layout
+    MetaInfo,
+  },
+});
 </script>
 
 <style lang="scss" scoped>
@@ -37,7 +35,7 @@ export default Layout
   grid-auto-columns: max-content;
   align-items: center;
   gap: 40px;
-  border-bottom: 1px solid #F0F2F3;
+  border-bottom: 1px solid #f0f2f3;
   padding: 0 34px;
 }
 </style>
