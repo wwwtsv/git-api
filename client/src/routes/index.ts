@@ -10,7 +10,7 @@ const routes: Array<RouteRecordRaw> = [
     children: [
       {
         name: "file-list",
-        path: "file-list",
+        path: "file-list/:repository/:path*",
         component: () => import("@app/views/file-list/index.vue"),
       },
     ],

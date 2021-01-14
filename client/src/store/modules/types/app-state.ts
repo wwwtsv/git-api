@@ -15,6 +15,16 @@ export const enum MutationTypes {
   ERROR_DOWNLOAD = "ERROR_DOWNLOAD",
 }
 
+export enum AppStateActions {
+  GetRepositoryList = "appState/GetRepositoryList",
+  GetCommitList = "appState/GetCommitList",
+  GetDiff = "appState/GetDiff",
+  GetFileList = "appState/GetFileList",
+  GetFileData = "appState/GetFileData",
+  DeleteRepository = "appState/DeleteRepository",
+  DownloadRepository = "appState/DownloadRepository",
+}
+
 export enum DeviceType {
   Mobile,
   Desktop,

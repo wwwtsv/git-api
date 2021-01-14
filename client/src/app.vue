@@ -3,12 +3,22 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { head } from "lodash";
+import { defineComponent, onMounted } from "vue";
 import { useStore } from "@app/store";
+import { AppStateActions } from "@app/store/modules/types/app-state";
+import { useRouter } from "vue-router";
 export default defineComponent({
   setup() {
     const store = useStore();
-    store.dispatch("GetRepositoryList");
+    const router = useRouter();
+    onMounted(() => {
+      store.dispatch(AppStateActions.GetRepositoryList);
+      const firstRepo = head(store.state.appState.repositoryList);
+      if (firstRepo) {
+        router.push(`/file-list/${firstRepo}`);
+      }
+    });
   },
 });
 </script>
@@ -22,6 +32,9 @@ export default defineComponent({
 }
 body {
   margin: 0;
+}
+::selection {
+  background: rgba(#ff4f49, 0.2);
 }
 :link {
   color: #1774e9;

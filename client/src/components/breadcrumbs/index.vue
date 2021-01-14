@@ -12,11 +12,19 @@
 
 <script>
 import { defineComponent } from "vue";
+import { useRoute, useRouter } from "vue-router";
 
 export default defineComponent({
-  data() {
+  setup() {
+    const router = useRouter();
+    const route = useRoute();
+
+    const pathToDirectory = route.fullPath.match(/tree\/(.+)+/);
+    const breadcrumbs = pathToDirectory[1].split("/");
+
     return {
-      breadcrumbs: ["arcadia", "api", "ci"],
+      router,
+      breadcrumbs,
     };
   },
 });

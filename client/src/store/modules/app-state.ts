@@ -20,6 +20,7 @@ import {
 } from "@app/store/modules/types/app-state";
 
 const appAppState: Module<AppState, AppState> = {
+  namespaced: true,
   state: (): AppState => ({
     device: DeviceType.Desktop,
     fileList: [],
@@ -63,6 +64,7 @@ const appAppState: Module<AppState, AppState> = {
     GetRepositoryList: async ({ commit }: Context): Promise<void> => {
       const repoList = await getRepositoryList();
       commit(MutationTypes.SET_REPOSITORIES_LIST, repoList.data);
+      commit(MutationTypes.SET_CURRENT_REPOSITORY, repoList.data[0]);
     },
     GetCommitList: async ({ commit }: Context, { repo, hash, perPage }: IGetCommit): Promise<void> => {
       const commitList = await getCommitList(repo, hash, perPage);

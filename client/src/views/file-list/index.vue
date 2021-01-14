@@ -1,6 +1,6 @@
 <template>
   <div class="FileList">
-    <breadcrumbs />
+    <breadcrumbs v-if="isTree" />
     <div class="FileList-Meta">
       <current-directory />
       <branch-drop-down />
@@ -21,6 +21,7 @@ import CurrentDirectory from "@components/current-dirictory/index.vue";
 import BranchDropDown from "@components/branch-drop-down/index.vue";
 import FileGrid from "@components/file-grid/index.vue";
 import LastCommit from "@components/last-commit/index.vue";
+import { useRoute } from "vue-router";
 
 export default defineComponent({
   components: {
@@ -29,6 +30,14 @@ export default defineComponent({
     BranchDropDown,
     FileGrid,
     LastCommit,
+  },
+  setup() {
+    const route = useRoute();
+
+    const isTree = route.fullPath.match(/tree\//);
+    return {
+      isTree,
+    };
   },
 });
 </script>
