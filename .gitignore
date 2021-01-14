@@ -35,3 +35,4 @@ client/node_modules/
 # editor
 .idea
 .vscode
+.DS_Store

@@ -10,9 +10,11 @@
 4. `GET /api/repos/:repositoryId(/tree/:commitHash/:path)` - возвращает содержимое репозитория, то что в скобках опционально
 5. `GET /api/repos/:repositoryId/blob/:commitHash/:pathToFile` - возвращает содержимое конкретного файла
 6. `DELETE /api/repos/:repositoryId` - удаляет репозиторий
-7. `POST /api/repos + { url: ‘repo-url’ }` - скачивает репозиторий по указанному URL в теле запроса
+7. `POST /api/repos + { repoUrl: ‘repo-url’ }` - скачивает репозиторий по указанному URL в теле запроса
 
 API на Express и TypeScript, для запуска требуется node.js v14.11. Можно использовать Yarn v1.22. Тестовый репозиторий находится в директории server/repos. 
 
 Точка входа в приложение `server/src/app.ts`
+
+В файле server/.env указывается папка с репозиториями с которой будет работать api
 

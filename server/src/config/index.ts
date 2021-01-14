@@ -12,5 +12,4 @@ export default {
     prefix: "/api",
   },
   repos: path.resolve(process.env.PATH_TO_REPO || "repos"),
-  db: path.resolve("src", "db", "index.json"),
 };
