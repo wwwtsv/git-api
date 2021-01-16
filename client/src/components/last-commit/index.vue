@@ -19,6 +19,7 @@
 import { defineComponent } from "vue";
 
 export default defineComponent({
+  name: "LastCommit",
   data() {
     return {
       lastCommit: "q3347435",

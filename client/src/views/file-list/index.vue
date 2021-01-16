@@ -1,8 +1,8 @@
 <template>
   <div class="FileList">
-    <breadcrumbs v-if="isTree" :breadcrumbs="breadcrumbs" :last-path="lastPath" />
+    <breadcrumbs :breadcrumbs="breadcrumbs" :last-path="lastPath" :current-repository="currentRepository" />
     <div class="FileList-Meta">
-      <current-directory />
+      <current-directory :last-path="lastPath" :current-repository="currentRepository" />
       <branch-drop-down />
     </div>
     <div class="FileList-LastCommit">
@@ -15,16 +15,18 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch } from "vue";
+import { computed, defineComponent, ref, watch } from "vue";
 import { last } from "lodash";
 import Breadcrumbs from "@components/breadcrumbs/index.vue";
-import CurrentDirectory from "@components/current-dirictory/index.vue";
+import CurrentDirectory from "@components/current-directory/index.vue";
 import BranchDropDown from "@components/branch-drop-down/index.vue";
 import FileGrid from "@components/file-grid/index.vue";
 import LastCommit from "@components/last-commit/index.vue";
 import { useRoute } from "vue-router";
+import { useStore } from "@app/store";
 
 export default defineComponent({
+  name: "FileList",
   components: {
     Breadcrumbs,
     CurrentDirectory,
@@ -34,25 +36,22 @@ export default defineComponent({
   },
   setup() {
     const route = useRoute();
-    const isTree = ref(false);
-    const breadcrumbs = ref([""]);
-    const lastPath = ref("");
+    const store = useStore();
+    const breadcrumbs = ref();
+    const lastPath = ref();
 
     watch(
       () => route.fullPath,
       (newParams) => {
-        isTree.value = !!newParams.match(/tree\//);
-        if (isTree.value) {
-          const pathToDir = newParams.match(/tree\/(.+)+/);
-          const pathSegments = pathToDir ? pathToDir[1].split("/") : [];
-          breadcrumbs.value = pathSegments;
-          lastPath.value = last(pathSegments) || "";
-        }
+        const pathToDir = newParams.match(/tree\/(.+)+/);
+        const pathSegments = pathToDir ? pathToDir[1].split("/") : [];
+        breadcrumbs.value = pathSegments;
+        lastPath.value = last(pathSegments) || "";
       }
     );
 
     return {
-      isTree,
+      currentRepository: computed(() => store.state.appState.currentRepository),
       breadcrumbs,
       lastPath,
     };

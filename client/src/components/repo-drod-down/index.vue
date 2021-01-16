@@ -91,6 +91,7 @@ export default defineComponent({
     list-style-type: none;
     background: #fff;
     box-shadow: 0 4px 16px rgba(53, 73, 93, 0.2);
+    z-index: 100;
   }
   &-Link {
     color: #000;

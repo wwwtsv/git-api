@@ -13,6 +13,7 @@ import BaseTabs from "@components/base-tabs/index.vue";
 import FileGridRows from "@components/file-grid-rows/index.vue";
 
 export default defineComponent({
+  name: "FileGrid",
   components: {
     BaseTabs,
     FileGridRows,

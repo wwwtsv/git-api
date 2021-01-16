@@ -1,26 +1,53 @@
 <template>
   <div class="Breadcrumbs">
-    <ul class="Breadcrumbs-List">
+    <ul v-if="isTree" class="Breadcrumbs-List">
       <li v-for="(elem, index) in breadcrumbs" :key="index" class="Breadcrumbs-Elem">
         <div v-if="lastPath === elem" class="Breadcrumbs-CurrentDir">
           {{ elem }}
         </div>
-        <router-link v-else class="Breadcrumbs-Link" :to="{ path: `/${elem}` }">
+        <router-link
+          v-else
+          class="Breadcrumbs-Link"
+          :to="{
+            path: `/file-list/${currentRepository}/${
+              index === 0 ? '' : breadcrumbs.slice(0, index).join('/') + '/'
+            }${elem}`,
+          }"
+        >
           {{ elem }}
         </router-link>
+      </li>
+    </ul>
+    <ul v-else class="Breadcrumbs-List">
+      <li class="Breadcrumbs-Elem">
+        <div class="Breadcrumbs-CurrentDir">
+          {{ currentRepository }}
+        </div>
       </li>
     </ul>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "vue";
+import { isEmpty } from "lodash";
+import { defineComponent, PropType, ref, watch } from "vue";
 
 export default defineComponent({
   name: "Breadcrumbs",
   props: {
-    breadcrumbs: { type: Array as PropType<Array<string>>, default: () => [""] },
+    currentRepository: { type: String as PropType<string>, default: () => "" },
+    breadcrumbs: { type: Array as PropType<Array<string>>, default: () => null },
     lastPath: { type: String, default: () => "" },
+  },
+  setup(props) {
+    const isTree = ref();
+    watch(
+      () => props.breadcrumbs,
+      (newBreadcrumbs) => (isTree.value = !isEmpty(newBreadcrumbs))
+    );
+    return {
+      isTree,
+    };
   },
 });
 </script>

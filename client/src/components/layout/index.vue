@@ -1,7 +1,7 @@
 <template>
   <div class="Layout">
     <header class="Header">
-      <base-logo />
+      <base-logo :current-repository="currentRepository" />
       <repo-drop-down />
     </header>
     <main class="Main">
@@ -14,16 +14,24 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { computed, defineComponent } from "vue";
 import BaseLogo from "@components/base-logo/index.vue";
 import RepoDropDown from "@components/repo-drod-down/index.vue";
 import MetaInfo from "@components/meta-info/index.vue";
+import { useStore } from "@app/store";
 
 export default defineComponent({
+  name: "Layout",
   components: {
     BaseLogo,
     RepoDropDown,
     MetaInfo,
+  },
+  setup() {
+    const store = useStore();
+    return {
+      currentRepository: computed(() => store.state.appState.currentRepository),
+    };
   },
 });
 </script>

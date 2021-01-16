@@ -15,6 +15,7 @@
 import { defineComponent } from "vue";
 
 export default defineComponent({
+  name: "BranchDropDown",
   data() {
     return {
       branchList: ["thunk", "master", "main"],

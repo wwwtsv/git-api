@@ -37,6 +37,7 @@
 import { defineComponent } from "vue";
 
 export default defineComponent({
+  name: "FileGridRows",
   data() {
     return {
       rows: ["Name", "Last Commit", "Commit message", "Committer", "Update"],
