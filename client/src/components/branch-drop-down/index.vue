@@ -1,6 +1,6 @@
 <template>
   <div class="BranchDropDown">
-    <button class="BranchDropDown-Button">
+    <button class="BranchDropDown-Button" @click="isOpen = !isOpen">
       {{ currentBranch }}
     </button>
     <ul v-if="isOpen" class="BranchDropDown-List">
@@ -12,15 +12,18 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref, PropType } from "vue";
 
 export default defineComponent({
   name: "BranchDropDown",
-  data() {
+  props: {
+    currentBranch: { type: String as PropType<string>, default: () => "" },
+  },
+  setup() {
+    const isOpen = ref(false);
+
     return {
-      branchList: ["thunk", "master", "main"],
-      currentBranch: "thunk",
-      isOpen: false,
+      isOpen,
     };
   },
 });

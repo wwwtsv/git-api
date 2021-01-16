@@ -104,10 +104,11 @@ export const getFileContent = (path: string, repoName: string, hash = "master", 
 
 export const getBranches = async (
   path: string,
-  repoName: string
+  repoName: string,
+  count = "--all"
 ): Promise<Array<{ name: string; time: string }> | string> => {
   const currentPath = `${path}/${repoName}`;
-  const branches = await gitAsyncProcess<Array<string>>("git", ["branch", "--all"], currentPath, (result) => {
+  const branches = await gitAsyncProcess<Array<string>>("git", ["branch", count], currentPath, (result) => {
     return result
       .split("\n")
       .map((branch) => branch.replace(/\W/, "").trim())
@@ -133,7 +134,7 @@ export const getBranches = async (
       })
     );
   } else {
-    return Promise.reject("File get branch data");
+    return Promise.reject("Fail get branch data");
   }
 };
 

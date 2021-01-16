@@ -85,7 +85,9 @@ export default (app: Router): void => {
     .get("/:repositoryId/branch", async (req, res, next) => {
       try {
         const { repositoryId } = req.params;
-        const branchData = await getBranches(PATH_TO_REPO, repositoryId);
+        const { all } = req.query;
+        const resolveBranchCount = all ? "--all" : "--show-current";
+        const branchData = await getBranches(PATH_TO_REPO, repositoryId, resolveBranchCount);
         res.status(200).json(branchData);
       } catch (err) {
         next(err);

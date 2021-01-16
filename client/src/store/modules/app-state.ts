@@ -7,6 +7,7 @@ import {
   getRepositoryList,
   deleteRepository,
   downloadRepository,
+  getBranchList,
 } from "@app/api/git";
 import {
   MutationTypes,
@@ -23,6 +24,7 @@ const appAppState: Module<AppState, AppState> = {
   namespaced: true,
   state: (): AppState => ({
     device: DeviceType.Desktop,
+    isLoading: false,
     fileList: [],
     lastCommit: null,
     repositoryList: [],
@@ -59,14 +61,50 @@ const appAppState: Module<AppState, AppState> = {
     DOWNLOAD_REPOSITORY: (state: AppState, payload: Array<string>): void => {
       state.repositoryList = payload;
     },
+    SET_LOADING: (state: AppState, payload: boolean): void => {
+      state.isLoading = payload;
+    },
+    SET_ERROR: (state: AppState, payload: string): void => {
+      state.error = payload;
+    },
   } as MutationTree<AppState>,
   actions: {
-    GetRepositoryList: async ({ commit }: Context): Promise<void> => {
-      const repoList = await getRepositoryList();
-      commit(MutationTypes.SET_REPOSITORIES_LIST, repoList.data);
-      commit(MutationTypes.SET_CURRENT_REPOSITORY, repoList.data[0]);
+    GetRepositoryList: ({ commit, state }: Context): Promise<void> => {
+      if (!state.isLoading) {
+        commit(MutationTypes.SET_LOADING, true);
+        return getRepositoryList().then(
+          (result) => {
+            commit(MutationTypes.SET_REPOSITORIES_LIST, result.data);
+            commit(MutationTypes.SET_CURRENT_REPOSITORY, result.data[0]);
+            commit(MutationTypes.SET_LOADING, false);
+          },
+          (reason) => {
+            commit(MutationTypes.SET_ERROR, `${reason}`);
+            commit(MutationTypes.SET_LOADING, false);
+          }
+        );
+      } else {
+        return Promise.reject("Failed get repo list");
+      }
     },
-    GetCommitList: async ({ commit }: Context, { repo, hash, perPage }: IGetCommit): Promise<void> => {
+    GetBranchList: ({ commit, state }: Context, repo: string, allBranches?: boolean): Promise<void> => {
+      if (!state.isLoading) {
+        commit(MutationTypes.SET_LOADING, true);
+        return getBranchList(repo, allBranches).then(
+          (result) => {
+            commit(MutationTypes.SET_CURRENT_BRANCH, result.data[0].name);
+            commit(MutationTypes.SET_LOADING, false);
+          },
+          (reason) => {
+            commit(MutationTypes.SET_ERROR, `${reason}`);
+            commit(MutationTypes.SET_LOADING, false);
+          }
+        );
+      } else {
+        return Promise.reject("Failed get branch list");
+      }
+    },
+    /*GetCommitList: async ({ commit }: Context, { repo, hash, perPage }: IGetCommit): Promise<void> => {
       const commitList = await getCommitList(repo, hash, perPage);
       // @ts-ignore
       const lastCommit = JSON.parse(commitList)[0];
@@ -101,7 +139,7 @@ const appAppState: Module<AppState, AppState> = {
       } else {
         commit(MutationTypes.ERROR_DOWNLOAD, `${downloadRepository}`);
       }
-    },
+    },*/
   } as ActionTree<AppState, AppState>,
 };
 

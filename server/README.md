@@ -11,6 +11,7 @@
 5. `GET /api/repos/:repositoryId/blob/:commitHash/:pathToFile` - возвращает содержимое конкретного файла
 6. `DELETE /api/repos/:repositoryId` - удаляет репозиторий
 7. `POST /api/repos + { repoUrl: ‘repo-url’ }` - скачивает репозиторий по указанному URL в теле запроса
+8. `GET /api/repos/:repositoryId/branch?all=[true]?` - получаем список веток репозитория 
 
 API на Express и TypeScript, для запуска требуется node.js v14.11. Можно использовать Yarn v1.22. Тестовый репозиторий находится в директории server/repos. 
 
@@ -18,3 +19,8 @@ API на Express и TypeScript, для запуска требуется node.js
 
 В файле server/.env указывается папка с репозиториями с которой будет работать api
 
+Для того что бы client работал, нужно как минимум запустить сервер. Как это сделать указано ниже.
+
+### Запуск сервера:
+1. Выполнить в папке проекта команду `yarn` или `npm install`
+2. `yarn start:watch` или `npm run start:watch` или `npm run start`

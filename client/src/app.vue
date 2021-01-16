@@ -3,24 +3,9 @@
 </template>
 
 <script lang="ts">
-import { head } from "lodash";
-import { defineComponent, onBeforeMount } from "vue";
-import { useStore } from "@app/store";
-import { AppStateActions } from "@app/store/modules/types/app-state";
-import { useRouter } from "vue-router";
+import { defineComponent } from "vue";
 export default defineComponent({
   name: "App",
-  setup() {
-    const store = useStore();
-    const router = useRouter();
-    onBeforeMount(async () => {
-      await store.dispatch(AppStateActions.GetRepositoryList);
-      const firstRepo = head(store.state.appState.repositoryList);
-      if (firstRepo) {
-        await router.push(`/file-list/${firstRepo}`);
-      }
-    });
-  },
 });
 </script>
 

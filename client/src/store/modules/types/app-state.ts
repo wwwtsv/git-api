@@ -11,12 +11,13 @@ export const enum MutationTypes {
   DELETE_REPOSITORY = "DELETE_REPOSITORY",
   DOWNLOAD_REPOSITORY = "DOWNLOAD_REPOSITORY",
   SET_FILE_DATA = "SET_FILE_DATA",
-  DELETE_ERROR = "DELETE_ERROR",
-  ERROR_DOWNLOAD = "ERROR_DOWNLOAD",
+  SET_LOADING = "SET_LOADING",
+  SET_ERROR = "SET_ERROR",
 }
 
 export enum AppStateActions {
   GetRepositoryList = "appState/GetRepositoryList",
+  GetBranchList = "appState/GetBranchList",
   GetCommitList = "appState/GetCommitList",
   GetDiff = "appState/GetDiff",
   GetFileList = "appState/GetFileList",
@@ -61,6 +62,7 @@ export interface FileListElem {
 export interface AppState {
   device: DeviceType;
   fileList: Array<FileListElem> | [];
+  isLoading: boolean;
   lastCommit: {
     hash: string;
     date: string;

@@ -3,7 +3,7 @@
     <breadcrumbs :breadcrumbs="breadcrumbs" :last-path="lastPath" :current-repository="currentRepository" />
     <div class="FileList-Meta">
       <current-directory :last-path="lastPath" :current-repository="currentRepository" />
-      <branch-drop-down />
+      <branch-drop-down v-if="currentBranch" :current-branch="currentBranch" />
     </div>
     <div class="FileList-LastCommit">
       <last-commit />
@@ -15,15 +15,18 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref, watch } from "vue";
-import { last } from "lodash";
+import { computed, defineComponent, onBeforeMount, ref, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import { head, last } from "lodash";
+// Components
 import Breadcrumbs from "@components/breadcrumbs/index.vue";
 import CurrentDirectory from "@components/current-directory/index.vue";
 import BranchDropDown from "@components/branch-drop-down/index.vue";
 import FileGrid from "@components/file-grid/index.vue";
 import LastCommit from "@components/last-commit/index.vue";
-import { useRoute } from "vue-router";
+// State
 import { useStore } from "@app/store";
+import { AppStateActions } from "@app/store/modules/types/app-state";
 
 export default defineComponent({
   name: "FileList",
@@ -36,6 +39,7 @@ export default defineComponent({
   },
   setup() {
     const route = useRoute();
+    const router = useRouter();
     const store = useStore();
     const breadcrumbs = ref();
     const lastPath = ref();
@@ -50,8 +54,18 @@ export default defineComponent({
       }
     );
 
+    onBeforeMount(async () => {
+      await store.dispatch(AppStateActions.GetRepositoryList);
+      const firstRepo = head(store.state.appState.repositoryList);
+      if (firstRepo) {
+        await store.dispatch(AppStateActions.GetBranchList, firstRepo);
+        await router.push(`/file-list/${firstRepo}`);
+      }
+    });
+
     return {
       currentRepository: computed(() => store.state.appState.currentRepository),
+      currentBranch: computed(() => store.state.appState.currentBranch),
       breadcrumbs,
       lastPath,
     };
