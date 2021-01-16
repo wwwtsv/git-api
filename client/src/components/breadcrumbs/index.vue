@@ -2,7 +2,10 @@
   <div class="Breadcrumbs">
     <ul class="Breadcrumbs-List">
       <li v-for="(elem, index) in breadcrumbs" :key="index" class="Breadcrumbs-Elem">
-        <router-link class="Breadcrumbs-Link" :to="{ path: `/${elem}` }">
+        <div v-if="lastPath === elem" class="Breadcrumbs-CurrentDir">
+          {{ elem }}
+        </div>
+        <router-link v-else class="Breadcrumbs-Link" :to="{ path: `/${elem}` }">
           {{ elem }}
         </router-link>
       </li>
@@ -10,22 +13,14 @@
   </div>
 </template>
 
-<script>
-import { defineComponent } from "vue";
-import { useRoute, useRouter } from "vue-router";
+<script lang="ts">
+import { defineComponent, PropType } from "vue";
 
 export default defineComponent({
-  setup() {
-    const router = useRouter();
-    const route = useRoute();
-
-    const pathToDirectory = route.fullPath.match(/tree\/(.+)+/);
-    const breadcrumbs = pathToDirectory[1].split("/");
-
-    return {
-      router,
-      breadcrumbs,
-    };
+  name: "Breadcrumbs",
+  props: {
+    breadcrumbs: { type: Array as PropType<Array<string>>, default: () => [""] },
+    lastPath: { type: String, default: () => "" },
   },
 });
 </script>
@@ -68,6 +63,9 @@ export default defineComponent({
     &:hover {
       color: #000;
     }
+  }
+  &-CurrentDir {
+    color: #000;
   }
 }
 </style>

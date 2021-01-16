@@ -1,6 +1,6 @@
 <template>
   <div class="FileList">
-    <breadcrumbs v-if="isTree" />
+    <breadcrumbs v-if="isTree" :breadcrumbs="breadcrumbs" :last-path="lastPath" />
     <div class="FileList-Meta">
       <current-directory />
       <branch-drop-down />
@@ -15,7 +15,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref, watch } from "vue";
+import { last } from "lodash";
 import Breadcrumbs from "@components/breadcrumbs/index.vue";
 import CurrentDirectory from "@components/current-dirictory/index.vue";
 import BranchDropDown from "@components/branch-drop-down/index.vue";
@@ -33,10 +34,27 @@ export default defineComponent({
   },
   setup() {
     const route = useRoute();
+    const isTree = ref(false);
+    const breadcrumbs = ref([""]);
+    const lastPath = ref("");
 
-    const isTree = route.fullPath.match(/tree\//);
+    watch(
+      () => route.fullPath,
+      (newParams) => {
+        isTree.value = !!newParams.match(/tree\//);
+        if (isTree.value) {
+          const pathToDir = newParams.match(/tree\/(.+)+/);
+          const pathSegments = pathToDir ? pathToDir[1].split("/") : [];
+          breadcrumbs.value = pathSegments;
+          lastPath.value = last(pathSegments) || "";
+        }
+      }
+    );
+
     return {
       isTree,
+      breadcrumbs,
+      lastPath,
     };
   },
 });

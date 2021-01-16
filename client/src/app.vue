@@ -4,19 +4,20 @@
 
 <script lang="ts">
 import { head } from "lodash";
-import { defineComponent, onMounted } from "vue";
+import { defineComponent, onBeforeMount } from "vue";
 import { useStore } from "@app/store";
 import { AppStateActions } from "@app/store/modules/types/app-state";
 import { useRouter } from "vue-router";
 export default defineComponent({
+  name: "App",
   setup() {
     const store = useStore();
     const router = useRouter();
-    onMounted(() => {
-      store.dispatch(AppStateActions.GetRepositoryList);
+    onBeforeMount(async () => {
+      await store.dispatch(AppStateActions.GetRepositoryList);
       const firstRepo = head(store.state.appState.repositoryList);
       if (firstRepo) {
-        router.push(`/file-list/${firstRepo}`);
+        await router.push(`/file-list/${firstRepo}`);
       }
     });
   },

@@ -24,6 +24,7 @@ import { useStore } from "@app/store";
 import { useRoute } from "vue-router";
 
 export default defineComponent({
+  name: "RepoDropDown",
   setup() {
     const isOpen = ref(false);
     const route = useRoute();
