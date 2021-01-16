@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   deleteRepository,
   downloadRepository,
+  getBranches,
   getCommits,
   getDiff,
   getFileContent,
@@ -29,7 +30,7 @@ export default (app: Router): void => {
       try {
         const { repositoryId, commitHash } = req.params;
         const { perPage } = req.query;
-        const resolvePerPage = perPage ? `${perPage}` : '10';
+        const resolvePerPage = perPage ? `${perPage}` : "10";
         const commits = await getCommits(PATH_TO_REPO, repositoryId, commitHash, resolvePerPage);
         res.status(200).json(commits);
       } catch (err) {
@@ -70,8 +71,22 @@ export default (app: Router): void => {
     .get("/:repositoryId/blob/:commitHash?/:pathToFile*", async (req, res, next) => {
       try {
         const { repositoryId, commitHash, pathToFile } = req.params;
-        const fileContent = await getFileContent(PATH_TO_REPO, repositoryId, commitHash, `${pathToFile}${req.params[0]}`);
+        const fileContent = await getFileContent(
+          PATH_TO_REPO,
+          repositoryId,
+          commitHash,
+          `${pathToFile}${req.params[0]}`
+        );
         res.status(200).json(fileContent);
+      } catch (err) {
+        next(err);
+      }
+    })
+    .get("/:repositoryId/branch", async (req, res, next) => {
+      try {
+        const { repositoryId } = req.params;
+        const branchData = await getBranches(PATH_TO_REPO, repositoryId);
+        res.status(200).json(branchData);
       } catch (err) {
         next(err);
       }
@@ -93,5 +108,5 @@ export default (app: Router): void => {
       } catch (err) {
         next(err);
       }
-    })
+    });
 };

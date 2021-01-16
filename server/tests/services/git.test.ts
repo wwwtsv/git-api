@@ -6,9 +6,8 @@ import {
   getDiff,
   getRepositoryContent,
   getFileContent,
-  deleteRepository,
-  downloadRepository,
   getLogForRepositoryContent,
+  getBranches,
 } from "../../src/services/git";
 
 describe("Service Git", () => {
@@ -57,16 +56,13 @@ describe("Service Git", () => {
       expect(content).to.have.string("export function Component(props, context) {");
     });
   });
-  /*describe("deleteRepository", () => {
-    it("Should return delete repository name", async () => {
-      const deleteRepo = await deleteRepository(pathToRepo, "preact");
-      expect(deleteRepo).to.have.string("Repository 'preact' delete");
+  describe("getBranchList", () => {
+    it("Should return branch names with last commit date", async () => {
+      const branches = await getBranches(pathToRepo, "preact");
+      console.log(branches);
+      expect(branches)
+        .to.be.an("array")
+        .to.deep.include({ name: "remotes/origin/perf-1/4-break-up-diffChildren", time: "8 months ago" });
     });
   });
-  describe("downloadRepository", () => {
-    it("Should return download repository name", async () => {
-      const downloadRepo = await downloadRepository(pathToRepo, "https://github.com/preactjs/preact.git");
-      expect(downloadRepo).to.have.string("Repository 'preact' download");
-    });
-  });*/
 });

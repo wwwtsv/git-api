@@ -10,7 +10,7 @@ export const getRepos = async (path: string): Promise<string[]> => {
   return files;
 };
 
-export const getCommits = (path: string, repoName: string, hash: string, limit = ''): Promise<string> => {
+export const getCommits = (path: string, repoName: string, hash: string, limit = ""): Promise<string> => {
   const prettyFormat = `%H${PARAM}%B${PARAM}%cd${LINE}`;
   const commitsPerPage = limit ? `-n ${limit}` : `-n 1000`;
   return gitAsyncProcess<string>(
@@ -100,6 +100,41 @@ export const getFileContent = (path: string, repoName: string, hash = "master", 
   return gitAsyncProcess<string>("git", ["show", currentFile], `${path}/${repoName}`, (result) => {
     return result;
   });
+};
+
+export const getBranches = async (
+  path: string,
+  repoName: string
+): Promise<Array<{ name: string; time: string }> | string> => {
+  const currentPath = `${path}/${repoName}`;
+  const branches = await gitAsyncProcess<Array<string>>("git", ["branch", "--all"], currentPath, (result) => {
+    return result
+      .split("\n")
+      .map((branch) => branch.replace(/\W/, "").trim())
+      .filter(Boolean);
+  });
+  if (Array.isArray(branches)) {
+    const lastCommitInBranch = await Promise.all(
+      branches.map(async (branch) => {
+        return gitAsyncProcess<string>(
+          "git",
+          ["log", "-n 1", `${branch}`, "--pretty=format:%cr"],
+          currentPath,
+          (result) => result
+        );
+      })
+    );
+    return Promise.resolve(
+      branches.map((branch, index) => {
+        return {
+          name: branch,
+          time: lastCommitInBranch[index],
+        };
+      })
+    );
+  } else {
+    return Promise.reject("File get branch data");
+  }
 };
 
 export const deleteRepository = (path: string, repoName: string): Promise<string> => {
