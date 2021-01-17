@@ -35,9 +35,9 @@ import { defineComponent, PropType, ref, watch } from "vue";
 export default defineComponent({
   name: "Breadcrumbs",
   props: {
-    currentRepository: { type: String as PropType<string>, default: () => "" },
-    breadcrumbs: { type: Array as PropType<Array<string>>, default: () => null },
-    lastPath: { type: String, default: () => "" },
+    currentRepository: { type: String as PropType<string> },
+    breadcrumbs: { type: Array as PropType<Array<string>> },
+    lastPath: { type: String },
   },
   setup(props) {
     const isTree = ref();

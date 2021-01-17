@@ -40,6 +40,8 @@ export default defineComponent({
     transform: rotate(0);
   }
   to {
+    border-top-color: #fc0;
+    border-left-color: #fc0;
     transform: rotate(360deg);
   }
 }

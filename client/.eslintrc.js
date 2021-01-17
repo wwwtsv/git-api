@@ -15,5 +15,6 @@ module.exports = {
   rules: {
     "vue/html-indent": "off",
     "@typescript-eslint/ban-ts-comment": "off",
+    "vue/require-default-prop": "off",
   },
 };

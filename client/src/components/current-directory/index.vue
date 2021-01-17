@@ -10,8 +10,8 @@ import { defineComponent, PropType } from "vue";
 export default defineComponent({
   name: "CurrentDirectory",
   props: {
-    currentRepository: { type: String as PropType<string>, default: () => "" },
-    lastPath: { type: String as PropType<string>, default: () => "" },
+    currentRepository: { type: String as PropType<string> },
+    lastPath: { type: String as PropType<string> },
   },
 });
 </script>

@@ -11,7 +11,7 @@ export const getRepos = async (path: string): Promise<string[]> => {
 };
 
 export const getCommits = (path: string, repoName: string, hash: string, limit = ""): Promise<string> => {
-  const prettyFormat = `%H${PARAM}%B${PARAM}%cd${LINE}`;
+  const prettyFormat = `%H${PARAM}%B${PARAM}%cd${PARAM}%cn${LINE}`;
   const commitsPerPage = limit ? `-n ${limit}` : `-n 1000`;
   return gitAsyncProcess<string>(
     "git",
@@ -24,11 +24,12 @@ export const getCommits = (path: string, repoName: string, hash: string, limit =
           .join("")
           .split(LINE)
           .map((commit) => {
-            const [hash, message, date] = commit.split(PARAM);
+            const [hash, message, date, committer] = commit.split(PARAM);
             return {
               hash,
               message,
               date,
+              committer,
             };
           })
       );

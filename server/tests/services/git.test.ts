@@ -24,7 +24,7 @@ describe("Service Git", () => {
       expect(commits)
         .to.be.an("string")
         .that.does.include(
-          '{"hash":"9a422017fec6dab287c77c3aef63c7b2fef0c7e1","message":"🏌️‍♂️ rAF check","date":"Tue May 26 09:38:28 2020 -0400"}'
+          '{"hash":"9a422017fec6dab287c77c3aef63c7b2fef0c7e1","message":"🏌️‍♂️ rAF check","date":"Tue May 26 09:38:28 2020 -0400","committer":"GitHub"}'
         );
     });
   });

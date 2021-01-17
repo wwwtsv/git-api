@@ -65,7 +65,7 @@ import { defineComponent, PropType } from "vue";
 export default defineComponent({
   name: "BaseLogo",
   props: {
-    currentRepository: { type: String as PropType<string>, default: () => "" },
+    currentRepository: { type: String as PropType<string> },
   },
 });
 </script>

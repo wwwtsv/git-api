@@ -8,6 +8,7 @@ export const enum MutationTypes {
   SET_DIFF = "SET_DIFF",
   SET_CURRENT_REPOSITORY = "SET_CURRENT_REPOSITORY",
   SET_CURRENT_BRANCH = "SET_CURRENT_BRANCH",
+  SET_BRANCH_LIST = "SET_BRANCH_LIST",
   DELETE_REPOSITORY = "DELETE_REPOSITORY",
   DOWNLOAD_REPOSITORY = "DOWNLOAD_REPOSITORY",
   SET_FILE_DATA = "SET_FILE_DATA",
@@ -30,6 +31,7 @@ export enum DeviceType {
   Mobile,
   Desktop,
 }
+
 export type Context = ActionContext<AppState, AppState>;
 
 export interface IGetCommit {
@@ -59,15 +61,19 @@ export interface FileListElem {
   };
 }
 
+export interface LastCommit {
+  hash: string;
+  date: string;
+  committer: string;
+}
+
 export interface AppState {
   device: DeviceType;
   fileList: Array<FileListElem> | [];
   isLoading: boolean;
-  lastCommit: {
-    hash: string;
-    date: string;
-  } | null;
+  lastCommit: LastCommit | null;
   repositoryList: Array<string>;
+  branchList: Array<{ name: string; time: string }>;
   currentRepository: string;
   currentBranch: string;
   diff: string;

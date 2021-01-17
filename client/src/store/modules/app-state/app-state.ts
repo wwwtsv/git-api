@@ -1,4 +1,5 @@
-import { ActionTree, Module, MutationTree } from "vuex";
+import { DateTime } from "luxon";
+import { ActionContext, ActionTree, Module, MutationTree } from "vuex";
 import {
   getCommitList,
   getDiff,
@@ -18,15 +19,22 @@ import {
   IDiff,
   IGetRepositoryData,
   AppState,
-} from "@app/store/modules/types/app-state";
+  LastCommit,
+} from "./types/app-state";
+import { RootState } from "@app/store";
 
-const appAppState: Module<AppState, AppState> = {
+const appAppState: Module<AppState, RootState> = {
   namespaced: true,
   state: (): AppState => ({
     device: DeviceType.Desktop,
     isLoading: false,
     fileList: [],
-    lastCommit: null,
+    lastCommit: {
+      hash: "",
+      date: "",
+      committer: "",
+    },
+    branchList: [],
     repositoryList: [],
     currentRepository: "",
     currentBranch: "",
@@ -43,7 +51,10 @@ const appAppState: Module<AppState, AppState> = {
     SET_REPOSITORIES_LIST: (state: AppState, payload: Array<string>): void => {
       state.repositoryList = payload;
     },
-    SET_LAST_COMMIT: (state: AppState, payload: { hash: string; date: string }): void => {
+    SET_BRANCH_LIST: (state: AppState, payload: Array<{ name: string; time: string }>): void => {
+      state.branchList = payload;
+    },
+    SET_LAST_COMMIT: (state: AppState, payload: { hash: string; date: string; committer: string }): void => {
       state.lastCommit = payload;
     },
     SET_DIFF: (state: AppState, payload: string): void => {
@@ -69,7 +80,7 @@ const appAppState: Module<AppState, AppState> = {
     },
   } as MutationTree<AppState>,
   actions: {
-    GetRepositoryList: ({ commit, state }: Context): Promise<void> => {
+    GetRepositoryList: ({ commit, state }: ActionContext<AppState, RootState>): Promise<void> => {
       if (!state.isLoading) {
         commit(MutationTypes.SET_LOADING, true);
         return getRepositoryList().then(
@@ -87,12 +98,18 @@ const appAppState: Module<AppState, AppState> = {
         return Promise.reject("Failed get repo list");
       }
     },
-    GetBranchList: ({ commit, state }: Context, repo: string, allBranches?: boolean): Promise<void> => {
+    GetBranchList: (
+      { commit, state }: ActionContext<AppState, RootState>,
+      { repo, allBranches }: { repo: string; allBranches?: boolean }
+    ): Promise<void> => {
       if (!state.isLoading) {
         commit(MutationTypes.SET_LOADING, true);
         return getBranchList(repo, allBranches).then(
           (result) => {
             commit(MutationTypes.SET_CURRENT_BRANCH, result.data[0].name);
+            if (allBranches) {
+              commit(MutationTypes.SET_BRANCH_LIST, result.data);
+            }
             commit(MutationTypes.SET_LOADING, false);
           },
           (reason) => {
@@ -104,13 +121,29 @@ const appAppState: Module<AppState, AppState> = {
         return Promise.reject("Failed get branch list");
       }
     },
-    /*GetCommitList: async ({ commit }: Context, { repo, hash, perPage }: IGetCommit): Promise<void> => {
-      const commitList = await getCommitList(repo, hash, perPage);
-      // @ts-ignore
-      const lastCommit = JSON.parse(commitList)[0];
-      commit(MutationTypes.SET_LAST_COMMIT, lastCommit);
+    GetCommitList: (
+      { commit, state }: ActionContext<AppState, RootState>,
+      { repo, hash, perPage }: IGetCommit
+    ): Promise<void> => {
+      if (!state.isLoading) {
+        commit(MutationTypes.SET_LOADING, true);
+        return getCommitList(repo, hash, perPage).then((commits) => {
+          const lastCommit = JSON.parse(commits.data)[0];
+
+          const { hash, date, committer } = lastCommit as LastCommit;
+          const formattedLastCommit = {
+            hash: hash.substring(0, 6),
+            date: DateTime.fromJSDate(new Date(date)).toFormat("dd MMM yyyy, T"),
+            committer: committer,
+          };
+          commit(MutationTypes.SET_LAST_COMMIT, formattedLastCommit);
+          commit(MutationTypes.SET_LOADING, false);
+        });
+      } else {
+        return Promise.reject("Failed get commit list");
+      }
     },
-    GetDiff: async ({ commit }: Context, { repo, hash }: IDiff): Promise<void> => {
+    /*GetDiff: async ({ commit }: Context, { repo, hash }: IDiff): Promise<void> => {
       const diff = await getDiff(repo, hash);
       commit(MutationTypes.SET_DIFF, diff);
     },
@@ -140,7 +173,7 @@ const appAppState: Module<AppState, AppState> = {
         commit(MutationTypes.ERROR_DOWNLOAD, `${downloadRepository}`);
       }
     },*/
-  } as ActionTree<AppState, AppState>,
+  } as ActionTree<AppState, RootState>,
 };
 
 export default appAppState;

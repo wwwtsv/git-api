@@ -3,10 +3,10 @@
     <breadcrumbs :breadcrumbs="breadcrumbs" :last-path="lastPath" :current-repository="currentRepository" />
     <div class="FileList-Meta">
       <current-directory :last-path="lastPath" :current-repository="currentRepository" />
-      <branch-drop-down v-if="currentBranch" :current-branch="currentBranch" />
+      <branch-drop-down v-if="currentBranch" :current-branch="currentBranch" :current-repository="currentRepository" />
     </div>
     <div class="FileList-LastCommit">
-      <last-commit />
+      <last-commit :last-commit="lastCommit" />
     </div>
     <div class="FileList-Table">
       <file-grid />
@@ -17,7 +17,7 @@
 <script lang="ts">
 import { computed, defineComponent, onBeforeMount, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { head, last } from "lodash";
+import { last } from "lodash";
 // Components
 import Breadcrumbs from "@components/breadcrumbs/index.vue";
 import CurrentDirectory from "@components/current-directory/index.vue";
@@ -26,7 +26,8 @@ import FileGrid from "@components/file-grid/index.vue";
 import LastCommit from "@components/last-commit/index.vue";
 // State
 import { useStore } from "@app/store";
-import { AppStateActions } from "@app/store/modules/types/app-state";
+import { AppStateActions } from "@app/store/modules/app-state/types/app-state";
+import { RoutesMap } from "@app/routes";
 
 export default defineComponent({
   name: "FileList",
@@ -56,16 +57,19 @@ export default defineComponent({
 
     onBeforeMount(async () => {
       await store.dispatch(AppStateActions.GetRepositoryList);
-      const firstRepo = head(store.state.appState.repositoryList);
+      const firstRepo = store.state.appState.currentRepository;
       if (firstRepo) {
-        await store.dispatch(AppStateActions.GetBranchList, firstRepo);
-        await router.push(`/file-list/${firstRepo}`);
+        await store.dispatch(AppStateActions.GetBranchList, { repo: firstRepo });
+        await store.dispatch(AppStateActions.GetCommitList, { repo: firstRepo, hash: "HEAD", perPage: "1" });
+        const { FileList } = RoutesMap;
+        await router.push(`/${FileList}/${firstRepo}`);
       }
     });
 
     return {
       currentRepository: computed(() => store.state.appState.currentRepository),
       currentBranch: computed(() => store.state.appState.currentBranch),
+      lastCommit: computed(() => store.state.appState.lastCommit),
       breadcrumbs,
       lastPath,
     };
