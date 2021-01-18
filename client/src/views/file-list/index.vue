@@ -9,7 +9,7 @@
       <last-commit :last-commit="lastCommit" />
     </div>
     <div class="FileList-Table">
-      <file-grid :base-route="baseRoute" :file-list="fileList" />
+      <data-table :base-route="baseRoute" :rows="fileList" />
     </div>
   </div>
 </template>
@@ -22,7 +22,7 @@ import { last } from "lodash";
 import Breadcrumbs from "@components/breadcrumbs/index.vue";
 import CurrentDirectory from "@components/current-directory/index.vue";
 import BranchDropDown from "@components/branch-drop-down/index.vue";
-import FileGrid from "@components/file-grid/index.vue";
+import DataTable from "@components/data-table/index.vue";
 import LastCommit from "@components/last-commit/index.vue";
 // State
 import { useStore } from "@app/store";
@@ -32,10 +32,10 @@ import { RoutesMap } from "@app/routes";
 export default defineComponent({
   name: "FileList",
   components: {
+    DataTable,
     Breadcrumbs,
     CurrentDirectory,
     BranchDropDown,
-    FileGrid,
     LastCommit,
   },
   setup() {

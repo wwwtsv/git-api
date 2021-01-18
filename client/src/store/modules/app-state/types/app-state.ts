@@ -53,12 +53,10 @@ export interface IGetRepositoryData {
 
 export interface FileListElem {
   name: string;
-  meta: {
-    hash: string;
-    message: string;
-    committer: string;
-    date: string;
-  };
+  hash: string;
+  message: string;
+  committer: string;
+  date: string;
 }
 
 export interface LastCommit {

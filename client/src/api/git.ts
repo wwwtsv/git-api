@@ -3,12 +3,7 @@ import { AxiosPromise } from "axios";
 
 interface FileListElem {
   name: string;
-  meta: {
-    hash: string;
-    message: string;
-    committer: string;
-    date: string;
-  };
+  meta: string;
 }
 
 type RepoList = AxiosPromise<Array<string>>;

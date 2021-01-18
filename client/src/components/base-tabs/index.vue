@@ -7,6 +7,7 @@
           :key="index"
           class="BaseTabs-Elem"
           :class="{ 'BaseTabs-Elem_active': tab.isActive }"
+          @click="changeTabs(tab.id)"
         >
           {{ tab.name }}
         </li>
@@ -15,17 +16,33 @@
   </div>
 </template>
 
-<script>
-import { defineComponent } from "vue";
+<script lang="ts">
+import { computed, defineComponent, PropType, ref } from "vue";
 
 export default defineComponent({
   name: "BaseTabs",
-  data() {
+  props: {
+    initialTabs: {
+      type: Array as PropType<Array<{ id: number; name: string; isActive: boolean }>>,
+      default: () => [{ id: 0, name: "Tab", isActive: true }],
+    },
+  },
+  setup(props) {
+    const tabs = ref(props.initialTabs);
+    const changeTabs = (id) =>
+      (tabs.value = tabs.value.map((tab) => {
+        if (tab.id !== id) {
+          tab.isActive = false;
+          return tab;
+        } else {
+          tab.isActive = true;
+          return tab;
+        }
+      }));
+
     return {
-      tabs: [
-        { name: "Files", isActive: true },
-        { name: "Branches", isActive: false },
-      ],
+      changeTabs,
+      tabs: computed(() => tabs.value),
     };
   },
 });

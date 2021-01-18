@@ -28,17 +28,7 @@ const appAppState: Module<AppState, RootState> = {
   state: (): AppState => ({
     device: DeviceType.Desktop,
     isLoading: false,
-    fileList: [
-      {
-        name: "",
-        meta: {
-          hash: "",
-          message: "",
-          committer: "",
-          date: "",
-        },
-      },
-    ],
+    fileList: [],
     lastCommit: {
       hash: "",
       date: "",
@@ -167,7 +157,17 @@ const appAppState: Module<AppState, RootState> = {
         commit(MutationTypes.SET_LOADING, true);
         return getFileList(repo, hash, path).then(
           (commitList) => {
-            commit(MutationTypes.SET_FILE_LIST, commitList.data);
+            const formattedData = commitList.data.map((file) => {
+              const { hash, message, committer, date } = JSON.parse(file.meta);
+              return {
+                name: file.name,
+                hash,
+                message,
+                committer,
+                date,
+              };
+            });
+            commit(MutationTypes.SET_FILE_LIST, formattedData);
             commit(MutationTypes.SET_LOADING, false);
           },
           (reason) => {
