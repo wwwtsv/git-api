@@ -46,11 +46,12 @@ export const getDiff = (repo: string, hash: string): Diff =>
     url: `/${repo}/commits/${hash}/diff`,
   });
 
-export const getFileList = (repo: string, hash: string, path: string): FileList =>
-  request({
-    url: `/${repo}/${hash}/${path}`,
+export const getFileList = (repo: string, hash: string, path: string): FileList => {
+  return request({
+    url: [repo, "tree", hash, path].filter(Boolean).join("/"),
     method: "get",
   });
+};
 
 export const getFileData = (repo: string, hash: string, path: string): FileData =>
   request({

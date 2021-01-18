@@ -9,7 +9,7 @@
       <last-commit :last-commit="lastCommit" />
     </div>
     <div class="FileList-Table">
-      <file-grid />
+      <file-grid :base-route="baseRoute" :file-list="fileList" />
     </div>
   </div>
 </template>
@@ -44,6 +44,7 @@ export default defineComponent({
     const store = useStore();
     const breadcrumbs = ref();
     const lastPath = ref();
+    const baseRoute = ref();
 
     watch(
       () => route.fullPath,
@@ -61,8 +62,10 @@ export default defineComponent({
       if (firstRepo) {
         await store.dispatch(AppStateActions.GetBranchList, { repo: firstRepo });
         await store.dispatch(AppStateActions.GetCommitList, { repo: firstRepo, hash: "HEAD", perPage: "1" });
+        await store.dispatch(AppStateActions.GetFileList, { repo: firstRepo, hash: "HEAD" });
         const { FileList } = RoutesMap;
-        await router.push(`/${FileList}/${firstRepo}`);
+        baseRoute.value = `/${FileList}/${firstRepo}/tree`;
+        await router.push(baseRoute.value);
       }
     });
 
@@ -70,7 +73,9 @@ export default defineComponent({
       currentRepository: computed(() => store.state.appState.currentRepository),
       currentBranch: computed(() => store.state.appState.currentBranch),
       lastCommit: computed(() => store.state.appState.lastCommit),
+      fileList: computed(() => store.state.appState.fileList),
       breadcrumbs,
+      baseRoute,
       lastPath,
     };
   },
