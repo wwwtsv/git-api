@@ -27,10 +27,12 @@ export default defineComponent({
       default: () => [{ id: 0, name: "Tab", isActive: true }],
     },
   },
-  setup(props) {
+  emits: ["tabClick"],
+  setup(props, { emit }) {
     const tabs = ref(props.initialTabs);
-    const changeTabs = (id) =>
-      (tabs.value = tabs.value.map((tab) => {
+    const changeTabs = (id) => {
+      emit("tabClick", id);
+      return (tabs.value = tabs.value.map((tab) => {
         if (tab.id !== id) {
           tab.isActive = false;
           return tab;
@@ -39,6 +41,7 @@ export default defineComponent({
           return tab;
         }
       }));
+    };
 
     return {
       changeTabs,

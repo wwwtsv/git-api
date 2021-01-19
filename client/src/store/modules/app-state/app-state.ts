@@ -164,7 +164,10 @@ const appAppState: Module<AppState, RootState> = {
                 hash,
                 message,
                 committer,
-                date,
+                date: DateTime.fromJSDate(new Date(date)).toLocaleString({
+                  ...{ locale: "en" },
+                  ...DateTime.DATE_MED_WITH_WEEKDAY,
+                }),
               };
             });
             commit(MutationTypes.SET_FILE_LIST, formattedData);

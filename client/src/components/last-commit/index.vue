@@ -1,11 +1,11 @@
 <template>
   <div class="LastCommit">
     Last commit
-    <router-link class="LastCommit-Link" :to="{ path: `${hash}` }">
+    <router-link class="LastCommit-Link" :to="{ path: `` }">
       {{ lastCommit.hash }}
     </router-link>
     on
-    <router-link class="LastCommit-Link" :to="{ path: `${message}` }">
+    <router-link class="LastCommit-Link" :to="{ path: `` }">
       {{ lastCommit.date }}
     </router-link>
     by
@@ -16,7 +16,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref, watch } from "vue";
+import { defineComponent, PropType } from "vue";
 
 export default defineComponent({
   name: "LastCommit",
@@ -29,9 +29,6 @@ export default defineComponent({
       }>,
     },
   },
-  /*setup(props) {
-    watch(props);
-  },*/
 });
 </script>
 

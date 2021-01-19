@@ -9,7 +9,7 @@
       <last-commit :last-commit="lastCommit" />
     </div>
     <div class="FileList-Table">
-      <data-table :base-route="baseRoute" :rows="fileList" />
+      <data-table :rows="fileList" />
     </div>
   </div>
 </template>
@@ -56,7 +56,7 @@ export default defineComponent({
       }
     );
 
-    onBeforeMount(async () => {
+    const initFileList = async () => {
       await store.dispatch(AppStateActions.GetRepositoryList);
       const firstRepo = store.state.appState.currentRepository;
       if (firstRepo) {
@@ -67,7 +67,9 @@ export default defineComponent({
         baseRoute.value = `/${FileList}/${firstRepo}/tree`;
         await router.push(baseRoute.value);
       }
-    });
+    };
+
+    onBeforeMount(() => initFileList());
 
     return {
       currentRepository: computed(() => store.state.appState.currentRepository),
@@ -75,7 +77,6 @@ export default defineComponent({
       lastCommit: computed(() => store.state.appState.lastCommit),
       fileList: computed(() => store.state.appState.fileList),
       breadcrumbs,
-      baseRoute,
       lastPath,
     };
   },

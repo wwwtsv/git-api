@@ -45,7 +45,10 @@ export const getDiff = (path: string, repoName: string, hash: string): Promise<s
 
 export const getRepositoryContent = (path: string, repoName: string, hash: string): Promise<Array<string> | string> => {
   return gitAsyncProcess<Array<string>>("git", ["ls-tree", "--name-only", hash], `${path}/${repoName}`, (result) => {
-    return result.split("\n");
+    return result
+      .split("\n")
+      .filter(Boolean)
+      .sort((a, b) => new Intl.Collator("en").compare(a, b));
   });
 };
 
