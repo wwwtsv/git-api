@@ -22,6 +22,7 @@ import {
   LastCommit,
 } from "./types/app-state";
 import { RootState } from "@app/store";
+import { fileCompare } from "@app/helpers";
 
 const appAppState: Module<AppState, RootState> = {
   namespaced: true,
@@ -157,19 +158,22 @@ const appAppState: Module<AppState, RootState> = {
         commit(MutationTypes.SET_LOADING, true);
         return getFileList(repo, hash, path).then(
           (commitList) => {
-            const formattedData = commitList.data.map((file) => {
-              const { hash, message, committer, date } = JSON.parse(file.meta);
-              return {
-                name: file.name,
-                hash,
-                message,
-                committer,
-                date: DateTime.fromJSDate(new Date(date)).toLocaleString({
-                  ...{ locale: "en" },
-                  ...DateTime.DATE_MED_WITH_WEEKDAY,
-                }),
-              };
-            });
+            const formattedData = commitList.data
+              .map((file) => {
+                const { hash, message, committer, date } = JSON.parse(file.meta);
+                const resolveNameKey = file.name.includes(".") ? "file" : "folder";
+                return {
+                  [resolveNameKey]: file.name,
+                  hash,
+                  message,
+                  committer,
+                  date: DateTime.fromJSDate(new Date(date)).toLocaleString({
+                    ...{ locale: "en" },
+                    ...DateTime.DATE_MED_WITH_WEEKDAY,
+                  }),
+                };
+              })
+              .sort(fileCompare);
             commit(MutationTypes.SET_FILE_LIST, formattedData);
             commit(MutationTypes.SET_LOADING, false);
           },

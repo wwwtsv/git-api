@@ -2,10 +2,8 @@ import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
 import Layout from "@app/components/layout/index.vue";
 
 export enum RoutesMap {
-  FileList = "file-list",
+  FileList = `/file-list/:repository?/:category?/:path*`,
 }
-
-const { FileList } = RoutesMap;
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -15,8 +13,8 @@ const routes: Array<RouteRecordRaw> = [
     component: Layout,
     children: [
       {
-        name: FileList,
-        path: `${FileList}/:repository?/:category?/:path*`,
+        name: "file-list",
+        path: RoutesMap.FileList,
         component: () => import("@app/views/file-list/index.vue"),
       },
     ],

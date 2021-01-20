@@ -27,7 +27,6 @@ import LastCommit from "@components/last-commit/index.vue";
 // State
 import { useStore } from "@app/store";
 import { AppStateActions } from "@app/store/modules/app-state/types/app-state";
-import { RoutesMap } from "@app/routes";
 
 export default defineComponent({
   name: "FileList",
@@ -44,7 +43,6 @@ export default defineComponent({
     const store = useStore();
     const breadcrumbs = ref();
     const lastPath = ref();
-    const baseRoute = ref();
 
     watch(
       () => route.fullPath,
@@ -63,9 +61,7 @@ export default defineComponent({
         await store.dispatch(AppStateActions.GetBranchList, { repo: firstRepo });
         await store.dispatch(AppStateActions.GetCommitList, { repo: firstRepo, hash: "HEAD", perPage: "1" });
         await store.dispatch(AppStateActions.GetFileList, { repo: firstRepo, hash: "HEAD" });
-        const { FileList } = RoutesMap;
-        baseRoute.value = `/${FileList}/${firstRepo}/tree`;
-        await router.push(baseRoute.value);
+        await router.push({ name: "file-list", params: { repository: firstRepo, category: "tree" } });
       }
     };
 
