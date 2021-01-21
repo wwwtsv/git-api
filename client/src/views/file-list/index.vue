@@ -77,6 +77,7 @@ export default defineComponent({
     const fileList = computed(() => store.state.appState.fileList);
     const branchList = computed(() => store.state.appState.branchList);
     const currentBranch = computed(() => store.state.appState.currentBranch);
+    const currentRepository = computed(() => store.state.appState.currentRepository);
 
     onBeforeMount(async () => {
       await store.dispatch(AppStateActions.GetRepositoryList);
@@ -91,7 +92,6 @@ export default defineComponent({
 
     onBeforeRouteUpdate(async (to) => {
       const isBranches = to.params.category === "branches";
-      isBranches ? (rows.value = branchList.value) : (rows.value = fileList.value);
 
       const currentRepo = to.params.repository;
       if (isBranches && isEmpty(branchList.value)) {
@@ -99,26 +99,25 @@ export default defineComponent({
       }
 
       const pathSegments = to.params.path;
-      if (pathSegments) {
-        await store.dispatch(AppStateActions.GetFileList, {
-          repo: currentRepo,
-          hash: currentBranch.value,
-          path: pathSegments,
-        });
-        breadcrumbs.value = pathSegments;
-        lastPath.value = last(pathSegments) || "";
-        rows.value = fileList.value;
-      }
+      await store.dispatch(AppStateActions.GetFileList, {
+        repo: currentRepo,
+        hash: currentBranch.value,
+        path: pathSegments,
+      });
+      breadcrumbs.value = pathSegments;
+      lastPath.value = last(pathSegments) || "";
+
+      isBranches ? (rows.value = branchList.value) : (rows.value = fileList.value);
     });
 
     return {
-      currentRepository: computed(() => store.state.appState.currentRepository),
       lastCommit: computed(() => store.state.appState.lastCommit),
       isLoading: computed(() => store.state.appState.isLoading),
-      rows: computed(() => rows.value),
-      tabs: computed(() => tabs.value),
       columns: computed(() => columns.value),
       listType: computed(() => listType.value),
+      rows: computed(() => rows.value),
+      tabs: computed(() => tabs.value),
+      currentRepository,
       breadcrumbs,
       lastPath,
       currentBranch,

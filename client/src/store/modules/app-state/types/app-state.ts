@@ -19,6 +19,7 @@ export const enum MutationTypes {
 export enum AppStateActions {
   GetRepositoryList = "appState/GetRepositoryList",
   GetBranchList = "appState/GetBranchList",
+  SetCurrentBranch = "appState/SetCurrentBranch",
   GetCommitList = "appState/GetCommitList",
   GetFileList = "appState/GetFileList",
   GetDiff = "appState/GetDiff",

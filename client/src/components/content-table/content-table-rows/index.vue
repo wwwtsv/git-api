@@ -41,7 +41,10 @@
             </svg>
           </div>
 
-          <router-link v-if="key === 'hash'" :to="{ path: `/commit/${value}` }">
+          <router-link v-if="key === 'hash'" :to="{ path: `${route}/${value}` }">
+            {{ value }}
+          </router-link>
+          <router-link v-else-if="key === 'folder'" :to="{ path: `${route}/${value}` }">
             {{ value }}
           </router-link>
           <div v-else class="ContentTable-Text" :class="{ 'ContentTable-Text_committer': key === 'committer' }">
@@ -55,8 +58,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { computed, defineComponent } from "vue";
 import BaseLoading from "@components/base-loading";
+import { useRoute } from "vue-router";
 
 export default defineComponent({
   name: "ContentTableRows",
@@ -67,6 +71,12 @@ export default defineComponent({
     loadingMarker: Boolean,
     listType: String,
     rows: Array,
+  },
+  setup() {
+    const route = useRoute();
+    return {
+      route: computed(() => route.fullPath),
+    };
   },
 });
 </script>

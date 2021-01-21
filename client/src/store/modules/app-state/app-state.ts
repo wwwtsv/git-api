@@ -122,6 +122,16 @@ const appAppState: Module<AppState, RootState> = {
         return Promise.reject("Failed get branch list");
       }
     },
+    SetCurrentBranch({ commit, state }: ActionContext<AppState, RootState>, { branch }: { branch: string }): void {
+      const branchList = state.branchList;
+      const currentBranch = branchList.find((currentBranch) => currentBranch.name === branch);
+
+      if (currentBranch) {
+        commit(MutationTypes.SET_CURRENT_BRANCH, currentBranch.name);
+        const newBranchList = branchList.filter((filteredBranch) => filteredBranch.name !== currentBranch.name);
+        commit(MutationTypes.SET_BRANCH_LIST, [currentBranch, ...newBranchList]);
+      }
+    },
     GetCommitList: (
       { commit, state }: ActionContext<AppState, RootState>,
       { repo, hash, perPage }: IGetCommit

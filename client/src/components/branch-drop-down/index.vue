@@ -12,6 +12,7 @@
         :key="index"
         class="BranchDropDown-Elem"
         :class="{ 'BranchDropDown-Elem_active': currentBranch === branch.name }"
+        @click="handleChangeBranch(branch.name)"
       >
         <span class="BranchDropDown-Name" :class="{ 'BranchDropDown-Name_active': currentBranch === branch.name }">{{
           branch.name
@@ -51,9 +52,15 @@ export default defineComponent({
       }
     });
 
+    const handleChangeBranch = (branchName: string) => {
+      store.dispatch(AppStateActions.SetCurrentBranch, { branch: branchName });
+    };
+
     return {
       isOpen,
       branchList,
+
+      handleChangeBranch,
     };
   },
 });
