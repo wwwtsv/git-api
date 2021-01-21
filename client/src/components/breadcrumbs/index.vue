@@ -1,6 +1,11 @@
 <template>
   <div class="Breadcrumbs">
     <ul v-if="isTree" class="Breadcrumbs-List">
+      <li class="Breadcrumbs-Elem">
+        <router-link :to="{ name: 'file-list', params: { repository: currentRepository, category: 'tree', path: '' } }">
+          {{ currentRepository }}
+        </router-link>
+      </li>
       <li v-for="(elem, index) in breadcrumbs" :key="index" class="Breadcrumbs-Elem">
         <div v-if="lastPath === elem" class="Breadcrumbs-CurrentDir">
           {{ elem }}
@@ -9,9 +14,12 @@
           v-else
           class="Breadcrumbs-Link"
           :to="{
-            path: `/file-list/${currentRepository}/${
-              index === 0 ? '' : breadcrumbs.slice(0, index).join('/') + '/'
-            }${elem}`,
+            name: 'file-list',
+            params: {
+              repository: currentRepository,
+              category: 'tree',
+              path: [...breadcrumbs.slice(0, index), elem],
+            },
           }"
         >
           {{ elem }}

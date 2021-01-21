@@ -9,14 +9,22 @@
       <last-commit :last-commit="lastCommit" />
     </div>
     <div class="FileList-Table">
-      <data-table :rows="fileList" />
+      <data-table
+        :tabs="tabs"
+        :is-loading="isLoading"
+        :columns="columns"
+        :rows="rows"
+        :list-type="listType"
+        :handle-change-tabs="handleChangeTabs"
+      />
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onBeforeMount, ref, watch } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { isEmpty } from "lodash";
+import { computed, defineComponent, onBeforeMount, ref } from "vue";
+import { onBeforeRouteUpdate, useRouter } from "vue-router";
 import { last } from "lodash";
 // Components
 import Breadcrumbs from "@components/breadcrumbs/index.vue";
@@ -38,42 +46,84 @@ export default defineComponent({
     LastCommit,
   },
   setup() {
-    const route = useRoute();
     const router = useRouter();
     const store = useStore();
+
+    const tree = ["Name", "Last Commit", "Commit message", "Committer", "Update"];
+    const branches = ["Name", "Update"];
+    const columnVariants = {
+      tree,
+      branches,
+    };
+    const handleChangeTabs = (id: number) => {
+      const currentTab = tabs.value.find((tab) => tab.id === id);
+      if (currentTab) {
+        columns.value = columnVariants[currentTab.url as "tree" | "branches"];
+        listType.value = currentTab.url;
+        router.push({ params: { category: currentTab.url } });
+      }
+    };
+
     const breadcrumbs = ref();
     const lastPath = ref();
+    const rows = ref();
+    const columns = ref(tree);
+    const tabs = ref([
+      { id: 0, name: "Files", isActive: true, url: "tree" },
+      { id: 1, name: "Branches", isActive: false, url: "branches" },
+    ]);
+    const listType = ref("tree");
 
-    watch(
-      () => route.fullPath,
-      (newParams) => {
-        const pathToDir = newParams.match(/tree\/(.+)+/);
-        const pathSegments = pathToDir ? pathToDir[1].split("/") : [];
-        breadcrumbs.value = pathSegments;
-        lastPath.value = last(pathSegments) || "";
-      }
-    );
+    const fileList = computed(() => store.state.appState.fileList);
+    const branchList = computed(() => store.state.appState.branchList);
+    const currentBranch = computed(() => store.state.appState.currentBranch);
 
-    const initFileList = async () => {
+    onBeforeMount(async () => {
       await store.dispatch(AppStateActions.GetRepositoryList);
       const firstRepo = store.state.appState.currentRepository;
       if (firstRepo) {
         await store.dispatch(AppStateActions.GetBranchList, { repo: firstRepo });
-        await store.dispatch(AppStateActions.GetCommitList, { repo: firstRepo, hash: "HEAD", perPage: "1" });
-        await store.dispatch(AppStateActions.GetFileList, { repo: firstRepo, hash: "HEAD" });
+        await store.dispatch(AppStateActions.GetCommitList, { repo: firstRepo, hash: "master", perPage: "1" });
+        await store.dispatch(AppStateActions.GetFileList, { repo: firstRepo, hash: "master" });
         await router.push({ name: "file-list", params: { repository: firstRepo, category: "tree" } });
       }
-    };
+    });
 
-    onBeforeMount(() => initFileList());
+    onBeforeRouteUpdate(async (to) => {
+      const isBranches = to.params.category === "branches";
+      isBranches ? (rows.value = branchList.value) : (rows.value = fileList.value);
+
+      const currentRepo = to.params.repository;
+      if (isBranches && isEmpty(branchList.value)) {
+        await store.dispatch(AppStateActions.GetBranchList, { repo: currentRepo, allBranches: true });
+      }
+
+      const pathSegments = to.params.path;
+      if (pathSegments) {
+        await store.dispatch(AppStateActions.GetFileList, {
+          repo: currentRepo,
+          hash: currentBranch.value,
+          path: pathSegments,
+        });
+        breadcrumbs.value = pathSegments;
+        lastPath.value = last(pathSegments) || "";
+        rows.value = fileList.value;
+      }
+    });
 
     return {
       currentRepository: computed(() => store.state.appState.currentRepository),
-      currentBranch: computed(() => store.state.appState.currentBranch),
       lastCommit: computed(() => store.state.appState.lastCommit),
-      fileList: computed(() => store.state.appState.fileList),
+      isLoading: computed(() => store.state.appState.isLoading),
+      rows: computed(() => rows.value),
+      tabs: computed(() => tabs.value),
+      columns: computed(() => columns.value),
+      listType: computed(() => listType.value),
       breadcrumbs,
       lastPath,
+      currentBranch,
+
+      handleChangeTabs,
     };
   },
 });

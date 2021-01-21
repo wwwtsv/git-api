@@ -41,6 +41,9 @@ export default defineComponent({
   color: #000000;
   &-Link {
     color: #1774e9;
+    &:hover {
+      color: darken(#1774e9, 18);
+    }
   }
   &-Committer {
     &:first-letter {

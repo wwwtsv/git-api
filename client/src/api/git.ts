@@ -1,16 +1,16 @@
 import request from "@app/api/utils/request";
 import { AxiosPromise } from "axios";
 
-interface FileListElem {
-  name: string;
-  meta: string;
-}
-
 type RepoList = AxiosPromise<Array<string>>;
 type BranchList = AxiosPromise<Array<{ name: string; time: string }>>;
 type CommitList = AxiosPromise<string>;
 type Diff = AxiosPromise<string>;
-type FileList = AxiosPromise<Array<FileListElem>>;
+type FileList = AxiosPromise<
+  Array<{
+    name: string;
+    meta: string;
+  }>
+>;
 type FileData = AxiosPromise<string>;
 type DeleteInfo = AxiosPromise<string>;
 type DownloadInfo = AxiosPromise<string>;
@@ -41,9 +41,10 @@ export const getDiff = (repo: string, hash: string): Diff =>
     url: `/${repo}/commits/${hash}/diff`,
   });
 
-export const getFileList = (repo: string, hash: string, path: string): FileList => {
+export const getFileList = (repo: string, hash: string, path: Array<string>): FileList => {
+  const resolvePath = path ? path.join("/") : path;
   return request({
-    url: [repo, "tree", hash, path].filter(Boolean).join("/"),
+    url: [repo, "tree", hash, resolvePath].filter(Boolean).join("/"),
     method: "get",
   });
 };

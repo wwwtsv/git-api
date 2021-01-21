@@ -48,7 +48,7 @@ export interface IDiff {
 export interface IGetRepositoryData {
   repo: string;
   hash: string;
-  path: string;
+  path: Array<string>;
 }
 
 export interface FileListElem {
@@ -57,6 +57,11 @@ export interface FileListElem {
   message: string;
   committer: string;
   date: string;
+}
+
+export interface BranchListElem {
+  name: string;
+  time: string;
 }
 
 export interface LastCommit {
@@ -71,7 +76,7 @@ export interface AppState {
   isLoading: boolean;
   lastCommit: LastCommit | null;
   repositoryList: Array<string>;
-  branchList: Array<{ name: string; time: string }>;
+  branchList: Array<BranchListElem>;
   currentRepository: string;
   currentBranch: string;
   diff: string;
