@@ -90,12 +90,17 @@ export default defineComponent({
       }
     });
 
-    onBeforeRouteUpdate(async (to) => {
-      const isBranches = to.params.category === "branches";
+    onBeforeRouteUpdate(async (to, from) => {
+      const category = to.params.category;
 
       const currentRepo = to.params.repository;
+      const isBranches = category === "branches";
       if (isBranches && isEmpty(branchList.value)) {
         await store.dispatch(AppStateActions.GetBranchList, { repo: currentRepo, allBranches: true });
+      }
+
+      if (from.params.repository !== currentRepo) {
+        await store.dispatch(AppStateActions.SetCurrentRepository, currentRepo);
       }
 
       const pathSegments = to.params.path;

@@ -9,6 +9,7 @@
     "paths": { "*": ["web_modules/.types/*"], "@app/*": ["src/*"], "@components/*": ["src/components/*"] },
     "moduleResolution": "Node",
     "sourceMap": true,
-    "noEmit": true
+    "noEmit": true,
+    "allowSyntheticDefaultImports": true
   }
 }

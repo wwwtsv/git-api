@@ -99,6 +99,9 @@ const appAppState: Module<AppState, RootState> = {
         return Promise.reject("Failed get repo list");
       }
     },
+    SetCurrentRepository: ({ commit }: ActionContext<AppState, RootState>, payload: string): void => {
+      commit(MutationTypes.SET_CURRENT_REPOSITORY, payload);
+    },
     GetBranchList: (
       { commit, state }: ActionContext<AppState, RootState>,
       { repo, allBranches }: { repo: string; allBranches?: boolean }

@@ -1,14 +1,14 @@
 <template>
   <div class="RepoDropDown">
-    <button class="RepoDropDown-Button" :class="{ 'RepoDropDown-Button_active': isOpen }" @click="isOpen = !isOpen">
+    <button class="RepoDropDown-Button" :class="{ 'RepoDropDown-Button_active': isOpen }" @click="handleClick">
       <span class="RepoDropDown-BoldText">Repository</span> {{ currentRepository }}
     </button>
-    <ul v-if="isOpen" class="RepoDropDown-List">
+    <ul v-if="isOpen" v-click-outside="handleClick" class="RepoDropDown-List">
       <li v-for="(repo, index) in repositoryList" :key="index" class="RepoDropDown-Elem">
         <router-link
           v-if="routerRepository !== repo"
           class="RepoDropDown-Link"
-          :to="{ path: `${route.path}/${repo}` }"
+          :to="{ path: `/file-list/${repo}/tree` }"
           >{{ repo }}</router-link
         >
         <p v-else class="RepoDropDown-Picked">{{ repo }}</p>
@@ -25,17 +25,39 @@ import { useRoute } from "vue-router";
 
 export default defineComponent({
   name: "RepoDropDown",
+  directives: {
+    clickOutside: {
+      beforeMount(el, binding) {
+        const ourClickEventHandler = (event) => {
+          if (!el.contains(event.target) && el !== event.target) {
+            binding.value(event);
+          }
+        };
+        el.__vueClickEventHandler__ = ourClickEventHandler;
+        document.addEventListener("click", ourClickEventHandler);
+      },
+      unmounted(el) {
+        document.removeEventListener("click", el.__vueClickEventHandler__);
+      },
+    },
+  },
   setup() {
     const isOpen = ref(false);
     const route = useRoute();
     const state = useStore().state.appState;
     const routerRepository = ref(last(route.fullPath.split("/")));
+    const handleClick = (e) => {
+      e.stopPropagation();
+      isOpen.value ? (isOpen.value = false) : (isOpen.value = true);
+    };
     return {
       currentRepository: computed(() => state.currentRepository),
       repositoryList: computed(() => state.repositoryList),
       routerRepository,
       isOpen,
       route,
+
+      handleClick,
     };
   },
 });
@@ -84,6 +106,8 @@ export default defineComponent({
     font-weight: bold;
   }
   &-List {
+    display: grid;
+    gap: 20px;
     position: absolute;
     min-width: 266px;
     padding: 14px 22px;

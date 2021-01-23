@@ -24,3 +24,4 @@ API на Express и TypeScript, для запуска требуется node.js
 ### Запуск сервера:
 1. Выполнить в папке проекта команду `yarn` или `npm install`
 2. `yarn start:watch` или `npm run start:watch` или `npm run start`
+3. Для запуска сервера с определенными env переменными может понадобится установить пакет cross-env
