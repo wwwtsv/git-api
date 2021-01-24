@@ -31,6 +31,7 @@ import { defineComponent, ref, PropType, watch, computed } from "vue";
 import { useStore } from "@app/store";
 import { AppStateActions } from "@app/store/modules/app-state/types/app-state";
 import BaseLoading from "@components/base-loading";
+import { onBeforeRouteUpdate } from "vue-router";
 
 export default defineComponent({
   name: "BranchDropDown",
@@ -55,6 +56,16 @@ export default defineComponent({
     const handleChangeBranch = (branchName: string) => {
       store.dispatch(AppStateActions.SetCurrentBranch, { branch: branchName });
     };
+
+    onBeforeRouteUpdate(async (to) => {
+      const category = to.params.category;
+
+      const currentRepo = to.params.repository;
+      const isBranches = category === "branches";
+      if (isBranches && isEmpty(branchList.value)) {
+        await store.dispatch(AppStateActions.GetBranchList, { repo: currentRepo, allBranches: true });
+      }
+    });
 
     return {
       isOpen,

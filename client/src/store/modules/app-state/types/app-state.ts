@@ -14,6 +14,8 @@ export const enum MutationTypes {
   SET_FILE_DATA = "SET_FILE_DATA",
   SET_LOADING = "SET_LOADING",
   SET_ERROR = "SET_ERROR",
+  SET_BREADCRUMBS = "SET_BREADCRUMBS",
+  SET_LAST_PATH = "SET_LAST_PATH",
 }
 
 export enum AppStateActions {
@@ -27,6 +29,8 @@ export enum AppStateActions {
   GetFileData = "appState/GetFileData",
   DeleteRepository = "appState/DeleteRepository",
   DownloadRepository = "appState/DownloadRepository",
+  SetBreadcrumbs = "appState/SetBreadcrumbs",
+  SetLastPath = "appState/SetLastPath",
 }
 
 export enum DeviceType {
@@ -75,12 +79,15 @@ export interface LastCommit {
 export interface AppState {
   device: DeviceType;
   fileList: Array<FileListElem> | [];
+  fileData: { fileName: string; rows: number; content: string };
   isLoading: boolean;
   lastCommit: LastCommit | null;
+  lastPath: string;
   repositoryList: Array<string>;
   branchList: Array<BranchListElem>;
   currentRepository: string;
   currentBranch: string;
   diff: string;
+  breadcrumbs: Array<string>;
   error: string;
 }

@@ -8,7 +8,7 @@
         <router-link
           v-if="routerRepository !== repo"
           class="RepoDropDown-Link"
-          :to="{ path: `/file-list/${repo}/tree` }"
+          :to="{ path: `/file-navigation/file-list/${repo}/tree` }"
           >{{ repo }}</router-link
         >
         <p v-else class="RepoDropDown-Picked">{{ repo }}</p>
@@ -21,7 +21,8 @@
 import { last } from "lodash";
 import { defineComponent, ref, computed } from "vue";
 import { useStore } from "@app/store";
-import { useRoute } from "vue-router";
+import { onBeforeRouteUpdate, useRoute } from "vue-router";
+import { AppStateActions } from "@app/store/modules/app-state/types/app-state";
 
 export default defineComponent({
   name: "RepoDropDown",
@@ -44,15 +45,23 @@ export default defineComponent({
   setup() {
     const isOpen = ref(false);
     const route = useRoute();
-    const state = useStore().state.appState;
+    const store = useStore();
     const routerRepository = ref(last(route.fullPath.split("/")));
     const handleClick = (e) => {
       e.stopPropagation();
       isOpen.value ? (isOpen.value = false) : (isOpen.value = true);
     };
+
+    onBeforeRouteUpdate(async (to, from) => {
+      const currentRepo = to.params.repository;
+
+      if (from.params.repository !== currentRepo) {
+        await store.dispatch(AppStateActions.SetCurrentRepository, currentRepo);
+      }
+    });
     return {
-      currentRepository: computed(() => state.currentRepository),
-      repositoryList: computed(() => state.repositoryList),
+      currentRepository: computed(() => store.state.appState.currentRepository),
+      repositoryList: computed(() => store.state.appState.repositoryList),
       routerRepository,
       isOpen,
       route,

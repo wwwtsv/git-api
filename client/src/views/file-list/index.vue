@@ -1,37 +1,21 @@
 <template>
   <div class="FileList">
-    <breadcrumbs :breadcrumbs="breadcrumbs" :last-path="lastPath" :current-repository="currentRepository" />
-    <div class="FileList-Meta">
-      <current-directory :last-path="lastPath" :current-repository="currentRepository" />
-      <branch-drop-down v-if="currentBranch" :current-branch="currentBranch" :current-repository="currentRepository" />
-    </div>
-    <div class="FileList-LastCommit">
-      <last-commit :last-commit="lastCommit" />
-    </div>
-    <div class="FileList-Table">
-      <data-table
-        :tabs="tabs"
-        :is-loading="isLoading"
-        :columns="columns"
-        :rows="rows"
-        :list-type="listType"
-        :handle-change-tabs="handleChangeTabs"
-      />
-    </div>
+    <data-table
+      :tabs="tabs"
+      :is-loading="isLoading"
+      :columns="columns"
+      :rows="rows"
+      :list-type="listType"
+      :handle-change-tabs="handleChangeTabs"
+    />
   </div>
 </template>
 
 <script lang="ts">
-import { isEmpty } from "lodash";
-import { computed, defineComponent, onBeforeMount, ref } from "vue";
+import { computed, defineComponent, ref } from "vue";
 import { onBeforeRouteUpdate, useRouter } from "vue-router";
-import { last } from "lodash";
 // Components
-import Breadcrumbs from "@components/breadcrumbs/index.vue";
-import CurrentDirectory from "@components/current-directory/index.vue";
-import BranchDropDown from "@components/branch-drop-down/index.vue";
 import DataTable from "@components/data-table/index.vue";
-import LastCommit from "@components/last-commit/index.vue";
 // State
 import { useStore } from "@app/store";
 import { AppStateActions } from "@app/store/modules/app-state/types/app-state";
@@ -40,10 +24,6 @@ export default defineComponent({
   name: "FileList",
   components: {
     DataTable,
-    Breadcrumbs,
-    CurrentDirectory,
-    BranchDropDown,
-    LastCommit,
   },
   setup() {
     const router = useRouter();
@@ -64,8 +44,6 @@ export default defineComponent({
       }
     };
 
-    const breadcrumbs = ref();
-    const lastPath = ref();
     const rows = ref();
     const columns = ref(tree);
     const tabs = ref([
@@ -74,12 +52,7 @@ export default defineComponent({
     ]);
     const listType = ref("tree");
 
-    const fileList = computed(() => store.state.appState.fileList);
-    const branchList = computed(() => store.state.appState.branchList);
-    const currentBranch = computed(() => store.state.appState.currentBranch);
-    const currentRepository = computed(() => store.state.appState.currentRepository);
-
-    onBeforeMount(async () => {
+    const getFileListData = async () => {
       await store.dispatch(AppStateActions.GetRepositoryList);
       const firstRepo = store.state.appState.currentRepository;
       if (firstRepo) {
@@ -88,20 +61,17 @@ export default defineComponent({
         await store.dispatch(AppStateActions.GetFileList, { repo: firstRepo, hash: "master" });
         await router.push({ name: "file-list", params: { repository: firstRepo, category: "tree" } });
       }
-    });
+    };
+    getFileListData();
 
-    onBeforeRouteUpdate(async (to, from) => {
+    onBeforeRouteUpdate(async (to) => {
+      const branchList = computed(() => store.state.appState.branchList);
+      const currentBranch = computed(() => store.state.appState.currentBranch);
+      const fileList = computed(() => store.state.appState.fileList);
+
       const category = to.params.category;
-
       const currentRepo = to.params.repository;
       const isBranches = category === "branches";
-      if (isBranches && isEmpty(branchList.value)) {
-        await store.dispatch(AppStateActions.GetBranchList, { repo: currentRepo, allBranches: true });
-      }
-
-      if (from.params.repository !== currentRepo) {
-        await store.dispatch(AppStateActions.SetCurrentRepository, currentRepo);
-      }
 
       const pathSegments = to.params.path;
       await store.dispatch(AppStateActions.GetFileList, {
@@ -109,23 +79,16 @@ export default defineComponent({
         hash: currentBranch.value,
         path: pathSegments,
       });
-      breadcrumbs.value = pathSegments;
-      lastPath.value = last(pathSegments) || "";
 
       isBranches ? (rows.value = branchList.value) : (rows.value = fileList.value);
     });
 
     return {
-      lastCommit: computed(() => store.state.appState.lastCommit),
       isLoading: computed(() => store.state.appState.isLoading),
       columns: computed(() => columns.value),
       listType: computed(() => listType.value),
       rows: computed(() => rows.value),
       tabs: computed(() => tabs.value),
-      currentRepository,
-      breadcrumbs,
-      lastPath,
-      currentBranch,
 
       handleChangeTabs,
     };
@@ -133,16 +96,4 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scoped>
-.FileList {
-  padding: 0 32px;
-  &-Meta {
-    display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: max-content;
-    align-items: center;
-    gap: 4px;
-    padding-top: 12px;
-  }
-}
-</style>
+<style lang="scss" scoped></style>

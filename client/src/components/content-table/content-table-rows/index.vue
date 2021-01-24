@@ -41,10 +41,25 @@
             </svg>
           </div>
 
-          <router-link v-if="key === 'hash'" :to="{ path: `${route}/${value}` }">
+          <router-link
+            v-if="key === 'hash'"
+            class="ContentTable-Link_commit"
+            :to="{ path: `${route.fullPath}/${value}` }"
+          >
             {{ value }}
           </router-link>
-          <router-link v-else-if="key === 'folder'" :to="{ path: `${route}/${value}` }">
+          <router-link
+            v-else-if="key === 'folder'"
+            class="ContentTable-Link_folder"
+            :to="{ path: `${route.fullPath}/${value}` }"
+          >
+            {{ value }}
+          </router-link>
+          <router-link
+            v-else-if="key === 'file'"
+            class="ContentTable-Link_file"
+            :to="{ path: `/file-navigation/file-details/${route.params.repository}/details/${value}` }"
+          >
             {{ value }}
           </router-link>
           <div v-else class="ContentTable-Text" :class="{ 'ContentTable-Text_committer': key === 'committer' }">
@@ -75,7 +90,7 @@ export default defineComponent({
   setup() {
     const route = useRoute();
     return {
-      route: computed(() => route.fullPath),
+      route: computed(() => route),
     };
   },
 });
@@ -136,6 +151,16 @@ export default defineComponent({
   &-Icon {
     position: absolute;
     left: 4px;
+  }
+  &-Link {
+    &_folder {
+      color: #000;
+      transition: unset;
+      &:hover {
+        color: #1774e9;
+        text-decoration: underline;
+      }
+    }
   }
 }
 </style>

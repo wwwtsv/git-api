@@ -1,5 +1,5 @@
 import { DateTime } from "luxon";
-import { ActionContext, ActionTree, Module, MutationTree } from "vuex";
+import { Action, ActionContext, ActionTree, Module, MutationTree } from "vuex";
 import {
   getCommitList,
   getDiff,
@@ -30,16 +30,19 @@ const appAppState: Module<AppState, RootState> = {
     device: DeviceType.Desktop,
     isLoading: false,
     fileList: [],
+    fileData: { fileName: "", rows: 0, content: "" },
     lastCommit: {
       hash: "",
       date: "",
       committer: "",
     },
+    lastPath: "",
     branchList: [],
     repositoryList: [],
     currentRepository: "",
     currentBranch: "",
     diff: "",
+    breadcrumbs: [],
     error: "",
   }),
   mutations: {
@@ -48,6 +51,9 @@ const appAppState: Module<AppState, RootState> = {
     },
     SET_FILE_LIST: (state: AppState, payload: Array<FileListElem>): void => {
       state.fileList = payload;
+    },
+    SET_FILE_DATA: (state: AppState, payload: { fileName: string; rows: number; content: string }): void => {
+      state.fileData = payload;
     },
     SET_REPOSITORIES_LIST: (state: AppState, payload: Array<string>): void => {
       state.repositoryList = payload;
@@ -78,6 +84,12 @@ const appAppState: Module<AppState, RootState> = {
     },
     SET_ERROR: (state: AppState, payload: string): void => {
       state.error = payload;
+    },
+    SET_BREADCRUMBS: (state: AppState, payload: Array<string>): void => {
+      state.breadcrumbs = payload;
+    },
+    SET_LAST_PATH: (state: AppState, payload: string): void => {
+      state.lastPath = payload;
     },
   } as MutationTree<AppState>,
   actions: {
@@ -199,14 +211,41 @@ const appAppState: Module<AppState, RootState> = {
         return Promise.reject("Failed get file list");
       }
     },
+    GetFileData: async (
+      { commit, state }: ActionContext<AppState, RootState>,
+      { repo, hash, path, name }: { repo: string; hash: string; path: Array<string>; name: string }
+    ): Promise<void> => {
+      if (!state.isLoading) {
+        commit(MutationTypes.SET_LOADING, true);
+        return getFileData(repo, hash, path).then(
+          (fileData) => {
+            const lines = fileData.data.split("\n");
+            const formattedData = {
+              fileName: name,
+              rows: lines.length,
+              content: fileData.data,
+            };
+
+            commit(MutationTypes.SET_FILE_DATA, formattedData);
+            commit(MutationTypes.SET_LOADING, false);
+          },
+          (reason) => {
+            commit(MutationTypes.SET_ERROR, `${reason}`);
+            commit(MutationTypes.SET_LOADING, false);
+          }
+        );
+      }
+    },
+    SetBreadcrumbs: ({ commit }: ActionContext<AppState, RootState>, payload: Array<string>): void => {
+      commit(MutationTypes.SET_BREADCRUMBS, payload);
+    },
+    SetLastPath: ({ commit }: ActionContext<AppState, RootState>, payload: string): void => {
+      commit(MutationTypes.SET_LAST_PATH, payload);
+    },
 
     // GetDiff: async ({ commit }: Context, { repo, hash }: IDiff): Promise<void> => {
     //   const diff = await getDiff(repo, hash);
     //   commit(MutationTypes.SET_DIFF, diff);
-    // },
-    // GetFileData: async ({ commit }: Context, { repo, hash, path }: IGetRepositoryData): Promise<void> => {
-    //   const fileData = await getFileData(repo, hash, path);
-    //   commit(MutationTypes.SET_FILE_DATA, fileData);
     // },
     // DeleteRepository: async ({ state, commit }: Context, repo: string): Promise<void> => {
     //   const deleteRepo = await deleteRepository(repo);

@@ -1,6 +1,6 @@
 <template>
   <div class="BaseLogo">
-    <router-link :to="{ path: `/file-list/${currentRepository}` }">
+    <router-link :to="{ path: `/file-navigation/file-list/${currentRepository}` }">
       <svg width="118" height="20" viewBox="0 0 118 20" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path
           d="M4.11208 19.7497V13.3417L0 1.85232H2.06807L5.09802 10.7134L8.58488 0H10.4846L6.01182 13.4168V19.7497H4.11208Z"

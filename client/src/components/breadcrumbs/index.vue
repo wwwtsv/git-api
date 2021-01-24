@@ -37,8 +37,11 @@
 </template>
 
 <script lang="ts">
-import { isEmpty } from "lodash";
+import { isEmpty, last } from "lodash";
 import { defineComponent, PropType, ref, watch } from "vue";
+import { onBeforeRouteUpdate } from "vue-router";
+import { AppStateActions } from "@app/store/modules/app-state/types/app-state";
+import { useStore } from "@app/store";
 
 export default defineComponent({
   name: "Breadcrumbs",
@@ -48,11 +51,18 @@ export default defineComponent({
     lastPath: { type: String },
   },
   setup(props) {
+    const store = useStore();
     const isTree = ref();
     watch(
       () => props.breadcrumbs,
       (newBreadcrumbs) => (isTree.value = !isEmpty(newBreadcrumbs))
     );
+
+    onBeforeRouteUpdate(async (to) => {
+      const pathSegments = to.params.path;
+      await store.dispatch(AppStateActions.SetBreadcrumbs, pathSegments);
+      await store.dispatch(AppStateActions.SetLastPath, last(pathSegments) || "");
+    });
     return {
       isTree,
     };

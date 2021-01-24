@@ -49,9 +49,9 @@ export const getFileList = (repo: string, hash: string, path: Array<string>): Fi
   });
 };
 
-export const getFileData = (repo: string, hash: string, path: string): FileData =>
+export const getFileData = (repo: string, hash: string, path: Array<string>): FileData =>
   request({
-    url: `/${repo}/blob/${hash}/${path}`,
+    url: `/${repo}/blob/${hash}/${path.join("/")}`,
     method: "get",
   });
 
