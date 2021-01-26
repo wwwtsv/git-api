@@ -17,4 +17,10 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.FileViewerLines {
+  position: absolute;
+  padding: 0 28px;
+  line-height: 20px;
+}
+</style>

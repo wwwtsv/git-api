@@ -19,4 +19,14 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.FileViewerCode {
+  padding-left: 64px;
+  > pre {
+    margin: 0;
+    > code {
+      line-height: 20px;
+    }
+  }
+}
+</style>

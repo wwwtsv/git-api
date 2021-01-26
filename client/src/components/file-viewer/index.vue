@@ -4,10 +4,8 @@
       {{ fileData.fileName }}
     </div>
     <div class="FileViewer-Code">
-      <file-viewer-code :content="fileData.content" />
-    </div>
-    <div class="FileViewer-Lines">
       <file-viewer-lines :rows="fileData.rows" />
+      <file-viewer-code :content="fileData.content" />
     </div>
   </div>
   <base-loading v-else />
@@ -28,4 +26,13 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.FileViewer {
+  border-radius: 4px;
+  border: 1px solid #e5e5e5;
+  &-FileName {
+    padding: 16px;
+    background: #f5f5f5;
+  }
+}
+</style>
