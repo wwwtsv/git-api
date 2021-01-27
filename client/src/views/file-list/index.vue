@@ -53,14 +53,10 @@ export default defineComponent({
     const listType = ref("tree");
 
     const getFileListData = async () => {
-      await store.dispatch(AppStateActions.GetRepositoryList);
-      const firstRepo = store.state.appState.currentRepository;
-      if (firstRepo) {
-        await store.dispatch(AppStateActions.GetBranchList, { repo: firstRepo });
-        await store.dispatch(AppStateActions.GetCommitList, { repo: firstRepo, hash: "master", perPage: "1" });
-        await store.dispatch(AppStateActions.GetFileList, { repo: firstRepo, hash: "master" });
-        await router.push({ name: "file-list", params: { repository: firstRepo, category: "tree" } });
-      }
+      await store.dispatch(AppStateActions.InitRootData);
+      const currentRepository = store.state.appState.currentRepository;
+      await store.dispatch(AppStateActions.GetFileList, { repo: currentRepository, hash: "master" });
+      await router.push({ name: "file-list", params: { repository: currentRepository, category: "tree" } });
     };
     getFileListData();
 

@@ -39,7 +39,7 @@
 <script lang="ts">
 import { isEmpty, last } from "lodash";
 import { defineComponent, PropType, ref, watch } from "vue";
-import { onBeforeRouteUpdate } from "vue-router";
+import { onBeforeRouteUpdate, useRoute } from "vue-router";
 import { AppStateActions } from "@app/store/modules/app-state/types/app-state";
 import { useStore } from "@app/store";
 
@@ -52,11 +52,21 @@ export default defineComponent({
   },
   setup(props) {
     const store = useStore();
+    const route = useRoute();
+
     const isTree = ref();
     watch(
       () => props.breadcrumbs,
       (newBreadcrumbs) => (isTree.value = !isEmpty(newBreadcrumbs))
     );
+    const getBreadcrumbs = async () => {
+      const routePath = route.params.path;
+      if (routePath) {
+        await store.dispatch(AppStateActions.SetBreadcrumbs, routePath);
+        await store.dispatch(AppStateActions.SetLastPath, last(routePath) || "");
+      }
+    };
+    getBreadcrumbs();
 
     onBeforeRouteUpdate(async (to) => {
       const pathSegments = to.params.path;

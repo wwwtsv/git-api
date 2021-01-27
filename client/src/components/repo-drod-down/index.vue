@@ -47,7 +47,7 @@ export default defineComponent({
     const route = useRoute();
     const store = useStore();
     const routerRepository = ref(last(route.fullPath.split("/")));
-    const handleClick = (e) => {
+    const handleClick = (e: Event) => {
       e.stopPropagation();
       isOpen.value ? (isOpen.value = false) : (isOpen.value = true);
     };

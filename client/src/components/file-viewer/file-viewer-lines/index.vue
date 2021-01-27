@@ -19,8 +19,10 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .FileViewerLines {
-  position: absolute;
+  font-size: 12px;
+  text-align: right;
   padding: 0 28px;
-  line-height: 20px;
+  line-height: 24px;
+  color: #999999;
 }
 </style>

@@ -31,6 +31,7 @@ export enum AppStateActions {
   DownloadRepository = "appState/DownloadRepository",
   SetBreadcrumbs = "appState/SetBreadcrumbs",
   SetLastPath = "appState/SetLastPath",
+  InitRootData = "appState/InitRootData",
 }
 
 export enum DeviceType {

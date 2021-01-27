@@ -34,5 +34,10 @@ export default defineComponent({
     padding: 16px;
     background: #f5f5f5;
   }
+  &-Code {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: max-content;
+  }
 }
 </style>

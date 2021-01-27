@@ -30,6 +30,7 @@ export default defineComponent({
     ]);
 
     const getFileData = async (to: RouteLocationNormalized | RouteLocationNormalizedLoaded) => {
+      await store.dispatch(AppStateActions.InitRootData);
       await store.dispatch(AppStateActions.GetFileData, {
         repo: currentRepository.value || to.params.repository,
         hash: hash.value || "master",

@@ -20,6 +20,7 @@ import {
   IGetRepositoryData,
   AppState,
   LastCommit,
+  AppStateActions,
 } from "./types/app-state";
 import { RootState } from "@app/store";
 import { fileCompare } from "@app/helpers";
@@ -241,6 +242,12 @@ const appAppState: Module<AppState, RootState> = {
     },
     SetLastPath: ({ commit }: ActionContext<AppState, RootState>, payload: string): void => {
       commit(MutationTypes.SET_LAST_PATH, payload);
+    },
+    InitRootData: async ({ commit, state, dispatch }: ActionContext<AppState, RootState>): Promise<void> => {
+      await dispatch("GetRepositoryList");
+      const currentRepository = state.currentRepository;
+      await dispatch("GetCommitList", { repo: currentRepository, hash: "master", perPage: "1" });
+      await dispatch("GetBranchList", { repo: currentRepository });
     },
 
     // GetDiff: async ({ commit }: Context, { repo, hash }: IDiff): Promise<void> => {
