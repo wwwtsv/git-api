@@ -1,6 +1,6 @@
 <template>
   <div class="FileData">
-    <base-tabs :initial-tabs="tabs" />
+    <base-tabs :initial-tabs="tabs" @tab-click="handleChangeTabs" />
     <div class="FileData-Content">
       <file-viewer :file-data="fileData" />
     </div>
@@ -11,6 +11,7 @@
 import { defineComponent, PropType } from "vue";
 import BaseTabs from "@components/base-tabs/index.vue";
 import FileViewer from "@components/file-viewer/index.vue";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
   name: "FileData",
@@ -20,7 +21,17 @@ export default defineComponent({
     fileData: { type: Object as PropType<{ fileName: string; rows: number; content: string }> },
   },
   setup(props) {
-    console.log(props.tabs);
+    const router = useRouter();
+    const handleChangeTabs = (id: number) => {
+      const currentTab = props.tabs.find((tab) => tab.id === id);
+      if (currentTab) {
+        router.push({ params: { category: currentTab.url } });
+      }
+    };
+
+    return {
+      handleChangeTabs,
+    };
   },
 });
 </script>

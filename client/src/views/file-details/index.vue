@@ -25,8 +25,8 @@ export default defineComponent({
     const hash = computed(() => store.state.appState.currentBranch);
 
     const tabs = ref([
-      { id: 0, name: "details", isActive: true, url: "details" },
-      { id: 0, name: "history", isActive: false, url: "history" },
+      { id: 0, name: "details", isActive: route.params.category === "details", url: "details" },
+      { id: 1, name: "history", isActive: route.params.category === "history", url: "history" },
     ]);
 
     const getFileData = async (to: RouteLocationNormalized | RouteLocationNormalizedLoaded) => {
