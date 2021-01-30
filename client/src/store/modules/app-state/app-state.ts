@@ -19,13 +19,14 @@ import {
   IDiff,
   IGetRepositoryData,
   AppState,
-  LastCommit,
+  Commit,
   AppStateActions,
+  ExtendedCommit,
 } from "./types/app-state";
 import { RootState } from "@app/store";
 import { fileCompare } from "@app/helpers";
 
-const appAppState: Module<AppState, RootState> = {
+const appState: Module<AppState, RootState> = {
   namespaced: true,
   state: (): AppState => ({
     device: DeviceType.Desktop,
@@ -36,10 +37,12 @@ const appAppState: Module<AppState, RootState> = {
       hash: "",
       date: "",
       committer: "",
+      message: "",
     },
     lastPath: "",
     branchList: [],
     repositoryList: [],
+    commitList: [],
     currentRepository: "",
     currentBranch: "",
     diff: "",
@@ -62,8 +65,11 @@ const appAppState: Module<AppState, RootState> = {
     SET_BRANCH_LIST: (state: AppState, payload: Array<{ name: string; time: string }>): void => {
       state.branchList = payload;
     },
-    SET_LAST_COMMIT: (state: AppState, payload: { hash: string; date: string; committer: string }): void => {
+    SET_LAST_COMMIT: (state: AppState, payload: Commit): void => {
       state.lastCommit = payload;
+    },
+    SET_COMMIT_LIST: (state: AppState, payload: Array<ExtendedCommit>): void => {
+      state.commitList = payload;
     },
     SET_DIFF: (state: AppState, payload: string): void => {
       state.diff = payload;
@@ -148,7 +154,7 @@ const appAppState: Module<AppState, RootState> = {
         commit(MutationTypes.SET_BRANCH_LIST, [currentBranch, ...newBranchList]);
       }
     },
-    GetCommitList: (
+    GetLastCommit: (
       { commit, state }: ActionContext<AppState, RootState>,
       { repo, hash, perPage }: IGetCommit
     ): Promise<void> => {
@@ -158,7 +164,7 @@ const appAppState: Module<AppState, RootState> = {
           (commits) => {
             const lastCommit = JSON.parse(commits.data)[0];
 
-            const { hash, date, committer } = lastCommit as LastCommit;
+            const { hash, date, committer } = lastCommit as Commit;
             const formattedLastCommit = {
               hash: hash.substring(0, 6),
               date: DateTime.fromJSDate(new Date(date)).toFormat("dd MMM yyyy, T"),
@@ -173,7 +179,40 @@ const appAppState: Module<AppState, RootState> = {
           }
         );
       } else {
-        return Promise.reject("Failed get commit list");
+        return Promise.reject("Failed to get last commit");
+      }
+    },
+    GetCommitList: (
+      { commit, state }: ActionContext<AppState, RootState>,
+      { repo, hash, perPage }: IGetCommit
+    ): Promise<void> => {
+      if (!state.isLoading) {
+        commit(MutationTypes.SET_LOADING, true);
+        return getCommitList(repo, hash, perPage).then(
+          (commits) => {
+            const commitList = JSON.parse(commits.data) as Array<Commit>;
+            const formattedList = commitList.map(({ hash, committer, date, message }) => {
+              return {
+                title: message.split("\n")[0],
+                hash: hash.substring(0, 6),
+                fullHash: hash,
+                relativeTime: DateTime.fromJSDate(new Date(date)).toRelative(),
+                committer,
+                message,
+                date,
+              };
+            }) as Array<ExtendedCommit>;
+
+            commit(MutationTypes.SET_COMMIT_LIST, formattedList);
+            commit(MutationTypes.SET_LOADING, false);
+          },
+          (reason) => {
+            commit(MutationTypes.SET_ERROR, `${reason}`);
+            commit(MutationTypes.SET_LOADING, false);
+          }
+        );
+      } else {
+        return Promise.reject("Failed to get commit list");
       }
     },
     GetFileList: (
@@ -243,10 +282,10 @@ const appAppState: Module<AppState, RootState> = {
     SetLastPath: ({ commit }: ActionContext<AppState, RootState>, payload: string): void => {
       commit(MutationTypes.SET_LAST_PATH, payload);
     },
-    InitRootData: async ({ commit, state, dispatch }: ActionContext<AppState, RootState>): Promise<void> => {
+    InitRootData: async ({ state, dispatch }: ActionContext<AppState, RootState>): Promise<void> => {
       await dispatch("GetRepositoryList");
       const currentRepository = state.currentRepository;
-      await dispatch("GetCommitList", { repo: currentRepository, hash: "master", perPage: "1" });
+      await dispatch("GetLastCommit", { repo: currentRepository, hash: "master", perPage: "1" });
       await dispatch("GetBranchList", { repo: currentRepository });
     },
 
@@ -275,4 +314,4 @@ const appAppState: Module<AppState, RootState> = {
   } as ActionTree<AppState, RootState>,
 };
 
-export default appAppState;
+export default appState;

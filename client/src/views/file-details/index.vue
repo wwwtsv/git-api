@@ -1,6 +1,6 @@
 <template>
   <div class="FileDetails">
-    <file-data :file-data="fileData" :tabs="tabs" />
+    <file-data :commit-list="commitList" :file-data="fileData" :tabs="tabs" />
   </div>
 </template>
 
@@ -37,6 +37,11 @@ export default defineComponent({
         path: to.params.path,
         name: lastPath,
       });
+      if (to.params.category === "history") {
+        const repo = to.params.repository;
+        const file = to.params.path;
+        await store.dispatch(AppStateActions.GetCommitList, { repo, hash: file, perPage: "10" });
+      }
     };
     getFileData(route);
 
@@ -46,6 +51,7 @@ export default defineComponent({
 
     return {
       fileData: computed(() => store.state.appState.fileData),
+      commitList: computed(() => store.state.appState.commitList),
       tabs: computed(() => tabs.value),
     };
   },

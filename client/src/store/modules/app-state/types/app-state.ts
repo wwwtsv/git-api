@@ -5,6 +5,7 @@ export const enum MutationTypes {
   SET_FILE_LIST = "SET_FILE_LIST",
   SET_REPOSITORIES_LIST = "SET_REPOSITORIES_LIST",
   SET_LAST_COMMIT = "SET_LAST_COMMIT",
+  SET_COMMIT_LIST = "SET_COMMIT_LIST",
   SET_DIFF = "SET_DIFF",
   SET_CURRENT_REPOSITORY = "SET_CURRENT_REPOSITORY",
   SET_CURRENT_BRANCH = "SET_CURRENT_BRANCH",
@@ -23,6 +24,7 @@ export enum AppStateActions {
   SetCurrentRepository = "appState/SetCurrentRepository",
   GetBranchList = "appState/GetBranchList",
   SetCurrentBranch = "appState/SetCurrentBranch",
+  GetLastCommit = "appState/GetLastCommit",
   GetCommitList = "appState/GetCommitList",
   GetFileList = "appState/GetFileList",
   GetDiff = "appState/GetDiff",
@@ -71,10 +73,17 @@ export interface BranchListElem {
   time: string;
 }
 
-export interface LastCommit {
+export interface Commit {
   hash: string;
   date: string;
   committer: string;
+  message: string;
+}
+
+export interface ExtendedCommit extends Commit {
+  title: string;
+  fullHash: string;
+  relativeTime: string;
 }
 
 export interface AppState {
@@ -82,8 +91,9 @@ export interface AppState {
   fileList: Array<FileListElem> | [];
   fileData: { fileName: string; rows: number; content: string };
   isLoading: boolean;
-  lastCommit: LastCommit | null;
+  lastCommit: Commit | null;
   lastPath: string;
+  commitList: Array<Commit>;
   repositoryList: Array<string>;
   branchList: Array<BranchListElem>;
   currentRepository: string;

@@ -3,6 +3,7 @@
     <base-tabs :initial-tabs="tabs" @tab-click="handleChangeTabs" />
     <div class="FileData-Content">
       <file-viewer :file-data="fileData" />
+      <history-viewer />
     </div>
   </div>
 </template>
@@ -23,7 +24,7 @@ export default defineComponent({
   setup(props) {
     const router = useRouter();
     const handleChangeTabs = (id: number) => {
-      const currentTab = props.tabs.find((tab) => tab.id === id);
+      const currentTab = props.tabs?.find((tab) => tab.id === id);
       if (currentTab) {
         router.push({ params: { category: currentTab.url } });
       }
