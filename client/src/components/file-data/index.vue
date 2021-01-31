@@ -2,20 +2,20 @@
   <div class="FileData">
     <base-tabs :initial-tabs="tabs" @tab-click="handleChangeTabs" />
     <div class="FileData-Content">
-      <file-viewer :file-data="fileData" />
-      <history-viewer :days="days" />
+      <file-viewer v-if="route.params.category === 'details'" :file-data="fileData" />
+      <history-viewer v-else :days="days" />
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { groupBy } from "lodash";
+import { DateTime } from "luxon";
+import { useRoute, useRouter } from "vue-router";
 import { computed, defineComponent, PropType, ref } from "vue";
 import BaseTabs from "@components/base-tabs/index.vue";
 import FileViewer from "@components/file-viewer/index.vue";
 import HistoryViewer from "@components/history-viewer/index.vue";
-import { useRouter } from "vue-router";
-import { DateTime } from "luxon";
 
 export default defineComponent({
   name: "FileData",
@@ -39,6 +39,7 @@ export default defineComponent({
   },
   setup(props) {
     const router = useRouter();
+    const route = useRoute();
     const days = ref(groupBy(props.commitList, (obj) => DateTime.fromJSDate(new Date(obj.date)).day));
 
     const handleChangeTabs = (id: number) => {
@@ -49,6 +50,7 @@ export default defineComponent({
     };
 
     return {
+      route,
       days: computed(() => days.value),
       handleChangeTabs,
     };

@@ -11,10 +11,10 @@
     </div>
     <div class="HistoryViewerCommit-Content">
       <p class="HistoryViewerCommit-Title">
-        {{ commit.name }}
+        {{ commit.title.split(" ")[0] }}
       </p>
       <p class="HistoryViewerCommit-Description">
-        {{ commit.body }}
+        {{ commit.message }}
       </p>
       <div class="HistoryViewerCommit-Hash">
         {{ commit.hash }}
@@ -23,11 +23,11 @@
         {{ commit.committer }}
       </div>
       <div class="HistoryViewerCommit-Date">
-        {{ commit.date }}
+        {{ commit.relativeTime }}
       </div>
     </div>
     <div class="HistoryViewerCommit-LargeHash">
-      {{ commit.largeHash }}
+      {{ commit.fullHash }}
     </div>
   </div>
 </template>
@@ -43,4 +43,20 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.HistoryViewerCommit {
+  display: grid;
+  grid-auto-flow: column;
+  justify-content: space-between;
+  &-Title {
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 18px;
+    margin: 0 0 4px;
+  }
+  &-Description {
+    font-size: 13px;
+    line-height: 18px;
+  }
+}
+</style>

@@ -23,6 +23,7 @@ export const getCommits = (path: string, repoName: string, hash: string, limit =
           .split("\n")
           .join("")
           .split(LINE)
+          .filter(Boolean)
           .map((commit) => {
             const [hash, message, date, committer] = commit.split(PARAM);
             return {

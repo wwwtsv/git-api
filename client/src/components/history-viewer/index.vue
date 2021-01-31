@@ -1,7 +1,7 @@
 <template>
   <div class="HistoryViewer">
     <div class="HistoryViewer-Days">
-      <history-viewer-day v-for="(day, i) in days" :key="i" :day="day" />
+      <history-viewer-day v-for="(day, key, index) in days" :key="index" :day="day" />
     </div>
   </div>
 </template>
@@ -14,7 +14,7 @@ export default defineComponent({
   name: "HistoryViewer",
   components: { HistoryViewerDay },
   props: {
-    days: Array,
+    days: Object,
   },
 });
 </script>
