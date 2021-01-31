@@ -24,7 +24,7 @@ import {
   ExtendedCommit,
 } from "./types/app-state";
 import { RootState } from "@app/store";
-import { fileCompare } from "@app/helpers";
+import { fileCompare } from "@app/shared";
 
 const appState: Module<AppState, RootState> = {
   namespaced: true,
@@ -193,7 +193,7 @@ const appState: Module<AppState, RootState> = {
             const commitList = JSON.parse(commits.data) as Array<Commit>;
             const formattedList = commitList.map(({ hash, committer, date, message }) => {
               return {
-                title: message.split("\n")[0],
+                title: message,
                 hash: hash.substring(0, 6),
                 fullHash: hash,
                 relativeTime: DateTime.fromJSDate(new Date(date)).toRelative(),
