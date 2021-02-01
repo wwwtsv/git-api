@@ -16,14 +16,16 @@
       <p class="HistoryViewerCommit-Description">
         {{ commit.message }}
       </p>
-      <div class="HistoryViewerCommit-Hash">
-        {{ commit.hash }}
-      </div>
-      <div class="HistoryViewerCommit-Committer">
-        {{ commit.committer }}
-      </div>
-      <div class="HistoryViewerCommit-Date">
-        {{ commit.relativeTime }}
+      <div class="HistoryViewerCommit-Meta">
+        <div class="HistoryViewerCommit-Hash">
+          {{ commit.hash }}
+        </div>
+        <div class="HistoryViewerCommit-Committer">
+          {{ commit.committer }}
+        </div>
+        <div class="HistoryViewerCommit-Date">
+          {{ commit.relativeTime }}
+        </div>
       </div>
     </div>
     <div class="HistoryViewerCommit-LargeHash">
@@ -45,18 +47,48 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .HistoryViewerCommit {
+  position: relative;
   display: grid;
   grid-auto-flow: column;
-  justify-content: space-between;
+  grid-template-columns: min-content 1fr auto;
+  gap: 12px;
+  padding: 14px 0;
+  &:not(:last-child) {
+    &::before {
+      position: absolute;
+      content: "";
+      display: block;
+      left: 18px;
+      bottom: -8px;
+      width: 2px;
+      height: 32px;
+      background: #b8bec3;
+    }
+  }
+  &-Content {
+    display: grid;
+    gap: 4px;
+  }
   &-Title {
+    margin: 0;
     font-weight: bold;
     font-size: 14px;
     line-height: 18px;
-    margin: 0 0 4px;
   }
   &-Description {
     font-size: 13px;
     line-height: 18px;
+    margin: 0;
+  }
+  &-Meta {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: max-content;
+    gap: 8px;
+    font-size: 13px;
+  }
+  &-LargeHash {
+    font-size: 13px;
   }
 }
 </style>

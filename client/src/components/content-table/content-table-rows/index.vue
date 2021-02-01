@@ -58,7 +58,11 @@
           <router-link
             v-else-if="key === 'file'"
             class="ContentTable-Link_file"
-            :to="{ path: `/file-navigation/file-details/${route.params.repository}/details/${value}` }"
+            :to="{
+              path: `/file-navigation/file-details/${route.params.repository}/details/${
+                route.params.path ? `${route.params.path.join('/')}/` : ''
+              }${value}`,
+            }"
           >
             {{ value }}
           </router-link>

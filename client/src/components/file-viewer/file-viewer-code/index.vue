@@ -15,12 +15,10 @@ export default defineComponent({
     content: { type: String as PropType<string> },
   },
   setup(props) {
-    const code = ref();
+    const code = ref(props.content);
     const formatCode = (code = "") => {
       const assigmentOperator = (value: string) => `<span class="FileViewerCode-Assigment">${value}</span>`;
-      const functionOperator = (value: string) => `<span class="FileViewerCode-Function">${value}</span>`;
-      const url = (value: string) => `<span class="FileViewerCode-Url">${value}</span>`;
-      const formattedCode = code
+      return code
         .split("\n")
         .map((line) => {
           if (line.includes("repo")) {
@@ -32,7 +30,6 @@ export default defineComponent({
           return line;
         })
         .join("\n");
-      return formattedCode;
     };
 
     watch(

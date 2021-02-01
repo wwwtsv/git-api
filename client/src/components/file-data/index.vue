@@ -12,7 +12,7 @@
 import { groupBy } from "lodash";
 import { DateTime } from "luxon";
 import { useRoute, useRouter } from "vue-router";
-import { computed, defineComponent, PropType, ref } from "vue";
+import { computed, defineComponent, PropType, ref, watch } from "vue";
 import BaseTabs from "@components/base-tabs/index.vue";
 import FileViewer from "@components/file-viewer/index.vue";
 import HistoryViewer from "@components/history-viewer/index.vue";
@@ -40,7 +40,14 @@ export default defineComponent({
   setup(props) {
     const router = useRouter();
     const route = useRoute();
-    const days = ref(groupBy(props.commitList, (obj) => DateTime.fromJSDate(new Date(obj.date)).day));
+    const days = ref();
+
+    watch(
+      () => props.commitList,
+      (commits) => {
+        days.value = groupBy(commits, (obj) => DateTime.fromJSDate(new Date(obj.date)).day);
+      }
+    );
 
     const handleChangeTabs = (id: number) => {
       const currentTab = props.tabs?.find((tab) => tab.id === id);

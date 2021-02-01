@@ -40,7 +40,7 @@ export default defineComponent({
     display: grid;
     gap: 12px;
     grid-auto-flow: column;
-    grid-auto-columns: min-content;
+    grid-auto-columns: max-content;
     align-items: center;
     padding: 16px;
     background: #f5f5f5;

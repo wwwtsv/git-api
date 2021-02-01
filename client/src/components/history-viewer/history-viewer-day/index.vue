@@ -54,5 +54,8 @@ export default defineComponent({
 <style lang="scss" scoped>
 .HistoryViewerDay {
   padding: 16px 0;
+  &-Title {
+    color: #7f8285;
+  }
 }
 </style>
