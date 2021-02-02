@@ -55,7 +55,7 @@ export default defineComponent({
     onBeforeRouteUpdate(async (to, from) => {
       const currentRepo = to.params.repository;
 
-      if (from.params.repository !== currentRepo) {
+      if (from.params.repository !== currentRepo || currentRepo !== store.state.appState.currentRepository) {
         await store.dispatch(AppStateActions.SetCurrentRepository, currentRepo);
       }
     });

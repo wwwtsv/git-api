@@ -5,7 +5,6 @@
 </template>
 
 <script lang="ts">
-import { isEmpty } from "lodash";
 import { computed, defineComponent, ref } from "vue";
 import FileData from "@components/file-data/index.vue";
 import { onBeforeRouteUpdate, RouteLocationNormalized, RouteLocationNormalizedLoaded, useRoute } from "vue-router";
@@ -32,14 +31,12 @@ export default defineComponent({
 
     const getFileData = async (to: RouteLocationNormalized | RouteLocationNormalizedLoaded) => {
       await store.dispatch(AppStateActions.InitRootData);
-      if (isEmpty(store.state.appState.fileData)) {
-        await store.dispatch(AppStateActions.GetFileData, {
-          repo: currentRepository.value || to.params.repository,
-          hash: hash.value || "master",
-          path: to.params.path,
-          name: lastPath,
-        });
-      }
+      await store.dispatch(AppStateActions.GetFileData, {
+        repo: to.params.repository || currentRepository.value,
+        hash: hash.value || "master",
+        path: to.params.path,
+        name: lastPath,
+      });
       if (to.params.category === "history") {
         const repo = to.params.repository;
         const file = to.params.path;
