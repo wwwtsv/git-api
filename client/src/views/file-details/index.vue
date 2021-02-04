@@ -40,7 +40,11 @@ export default defineComponent({
       if (to.params.category === "history") {
         const repo = to.params.repository;
         const file = to.params.path;
-        await store.dispatch(AppStateActions.GetCommitList, { repo, hash: file, perPage: "10" });
+        await store.dispatch(AppStateActions.GetCommitList, {
+          repo,
+          hash: Array.isArray(file) ? file.join("/") : file,
+          perPage: "10",
+        });
       }
     };
     getFileData(route);

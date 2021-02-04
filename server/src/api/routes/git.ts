@@ -26,7 +26,7 @@ export default (app: Router): void => {
         next(err);
       }
     })
-    .get("/:repositoryId/commits/:commitHash", async (req, res, next) => {
+    .get("/:repositoryId/commits/:commitHash*", async (req, res, next) => {
       try {
         const { repositoryId, commitHash } = req.params;
         const { perPage } = req.query;

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="false">
+  <div class="MobileContentTableRows">
     <div v-if="!loadingMarker && rows.length">
       <div
         v-for="(item, index) in rows"
@@ -72,102 +72,21 @@
         </div>
       </div>
     </div>
-    <base-loading v-else />
   </div>
-  <mobile-current-table-rows :loading-marker="loadingMarker" :list-type="listType" :rows="rows" :route="route" />
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from "vue";
-import BaseLoading from "@components/base-loading";
-import MobileCurrentTableRows from "@components/content-table/content-table-rows/mobile-template/index.vue";
-import { useRoute } from "vue-router";
+import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: "ContentTableRows",
-  components: {
-    MobileCurrentTableRows,
-    BaseLoading,
-  },
+  name: "MobileCurrentTableRows",
   props: {
     loadingMarker: Boolean,
     listType: String,
     rows: Array,
-  },
-  setup() {
-    const route = useRoute();
-    return {
-      route: computed(() => route),
-    };
+    route: Object,
   },
 });
 </script>
 
-<style lang="scss" scoped>
-.ContentTable {
-  &-Elem {
-    display: grid;
-    grid-auto-flow: column;
-    padding: 16px 0;
-    border-bottom: 1px solid #f2f2f2;
-    transition: background-color 0.2s ease;
-    &:last-child {
-      border-bottom: none;
-    }
-    &_tree {
-      grid-template-columns: 14vw 8vw 23vw 12vw;
-      gap: 5vw;
-    }
-    &_branches {
-      grid-template-columns: 1fr auto;
-      justify-content: space-between;
-      gap: unset;
-    }
-    &:hover {
-      background-color: rgba(#7f8285, 0.08);
-    }
-  }
-  &-Item {
-    &_folder {
-      display: grid;
-      grid-auto-flow: column;
-      gap: 8px;
-    }
-    &_tree {
-      &:first-child {
-        padding-left: 28px;
-      }
-      &:last-child {
-        > div {
-          text-align: end;
-        }
-      }
-    }
-  }
-  &-Text {
-    max-width: 920px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    &_committer {
-      &:first-letter {
-        color: #ff4f49;
-      }
-    }
-  }
-  &-Icon {
-    position: absolute;
-    left: 4px;
-  }
-  &-Link {
-    &_folder {
-      color: #000;
-      transition: unset;
-      &:hover {
-        color: #1774e9;
-        text-decoration: underline;
-      }
-    }
-  }
-}
-</style>
+<style lang="scss" scoped></style>

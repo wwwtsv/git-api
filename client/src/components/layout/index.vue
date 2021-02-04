@@ -19,7 +19,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from "vue";
+import { computed, defineComponent } from "vue";
 import BaseLogo from "@components/base-logo/index.vue";
 import RepoDropDown from "@components/repo-drod-down/index.vue";
 import MetaInfo from "@components/meta-info/index.vue";
