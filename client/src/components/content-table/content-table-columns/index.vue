@@ -1,5 +1,6 @@
 <template>
   <div
+    v-if="device === 1"
     class="ContentTable-Columns"
     :class="{
       'ContentTable-Columns_tree': listType === 'tree',
@@ -13,13 +14,20 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { computed, defineComponent, watch } from "vue";
+import { useStore } from "@app/store";
 
 export default defineComponent({
   name: "ContentTableColumns",
   props: {
     columns: Array,
-    listType: Boolean,
+    listType: String,
+  },
+  setup() {
+    const store = useStore();
+    return {
+      device: computed(() => store.state.appState.device),
+    };
   },
 });
 </script>

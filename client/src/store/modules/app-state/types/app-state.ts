@@ -10,8 +10,6 @@ export const enum MutationTypes {
   SET_CURRENT_REPOSITORY = "SET_CURRENT_REPOSITORY",
   SET_CURRENT_BRANCH = "SET_CURRENT_BRANCH",
   SET_BRANCH_LIST = "SET_BRANCH_LIST",
-  DELETE_REPOSITORY = "DELETE_REPOSITORY",
-  DOWNLOAD_REPOSITORY = "DOWNLOAD_REPOSITORY",
   SET_FILE_DATA = "SET_FILE_DATA",
   SET_LOADING = "SET_LOADING",
   SET_ERROR = "SET_ERROR",
@@ -20,17 +18,15 @@ export const enum MutationTypes {
 }
 
 export enum AppStateActions {
+  SetDeviceType = "appState/SetDeviceType",
   GetRepositoryList = "appState/GetRepositoryList",
   SetCurrentRepository = "appState/SetCurrentRepository",
   GetBranchList = "appState/GetBranchList",
   SetCurrentBranch = "appState/SetCurrentBranch",
-  GetLastCommit = "appState/GetLastCommit",
   GetCommitList = "appState/GetCommitList",
   GetFileList = "appState/GetFileList",
   GetDiff = "appState/GetDiff",
   GetFileData = "appState/GetFileData",
-  DeleteRepository = "appState/DeleteRepository",
-  DownloadRepository = "appState/DownloadRepository",
   SetBreadcrumbs = "appState/SetBreadcrumbs",
   SetLastPath = "appState/SetLastPath",
   InitRootData = "appState/InitRootData",

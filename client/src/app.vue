@@ -4,8 +4,20 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import { useStore } from "@app/store";
+import { AppStateActions, DeviceType } from "@app/store/modules/app-state/types/app-state";
 export default defineComponent({
   name: "App",
+  setup() {
+    const store = useStore();
+    if (window) {
+      window.addEventListener("resize", () => {
+        window.screen.availWidth >= 768
+          ? store.dispatch(AppStateActions.SetDeviceType, DeviceType.Desktop)
+          : store.dispatch(AppStateActions.SetDeviceType, DeviceType.Mobile);
+      });
+    }
+  },
 });
 </script>
 

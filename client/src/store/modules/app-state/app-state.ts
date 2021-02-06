@@ -1,15 +1,6 @@
 import { DateTime } from "luxon";
-import { Action, ActionContext, ActionTree, Module, MutationTree } from "vuex";
-import {
-  getCommitList,
-  getDiff,
-  getFileData,
-  getFileList,
-  getRepositoryList,
-  deleteRepository,
-  downloadRepository,
-  getBranchList,
-} from "@app/api/git";
+import { ActionContext, ActionTree, Module, MutationTree } from "vuex";
+import { getCommitList, getDiff, getFileData, getFileList, getRepositoryList, getBranchList } from "@app/api/git";
 import {
   MutationTypes,
   FileListElem,
@@ -100,6 +91,9 @@ const appState: Module<AppState, RootState> = {
     },
   } as MutationTree<AppState>,
   actions: {
+    SetDeviceType: ({ commit, state }: ActionContext<AppState, RootState>, payload: DeviceType): void => {
+      commit(MutationTypes.SET_DEVICE, payload);
+    },
     GetRepositoryList: ({ commit, state }: ActionContext<AppState, RootState>): Promise<void> => {
       if (!state.isLoading) {
         commit(MutationTypes.SET_LOADING, true);
