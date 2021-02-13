@@ -1,5 +1,5 @@
 <template>
-  <div v-if="false">
+  <div v-if="isDesktop">
     <div v-if="!loadingMarker && rows.length">
       <div
         v-for="(item, index) in rows"
@@ -74,19 +74,21 @@
     </div>
     <base-loading v-else />
   </div>
-  <mobile-current-table-rows :loading-marker="loadingMarker" :list-type="listType" :rows="rows" :route="route" />
+  <content-table-rows-mobile v-else :loading-marker="loadingMarker" :list-type="listType" :rows="rows" :route="route" />
 </template>
 
 <script lang="ts">
 import { computed, defineComponent } from "vue";
 import BaseLoading from "@components/base-loading";
-import MobileCurrentTableRows from "@components/content-table/content-table-rows/mobile-template/index.vue";
+import ContentTableRowsMobile from "@components/content-table/content-table-rows/mobile-template/index.vue";
 import { useRoute } from "vue-router";
+import { useStore } from "@app/store";
+import { DeviceType } from "@app/store/modules/app-state/types/app-state";
 
 export default defineComponent({
   name: "ContentTableRows",
   components: {
-    MobileCurrentTableRows,
+    ContentTableRowsMobile,
     BaseLoading,
   },
   props: {
@@ -96,8 +98,12 @@ export default defineComponent({
   },
   setup() {
     const route = useRoute();
+    const store = useStore();
+    const device = computed(() => store.state.appState.device);
+
     return {
       route: computed(() => route),
+      isDesktop: computed(() => device.value === DeviceType.Desktop),
     };
   },
 });
