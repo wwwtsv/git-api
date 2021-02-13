@@ -17,9 +17,6 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
-import { AppStateActions } from "@app/store/modules/app-state/types/app-state";
-import { useStore } from "@app/store";
-import { useRoute } from "vue-router";
 
 export default defineComponent({
   name: "LastCommit",
@@ -52,6 +49,10 @@ export default defineComponent({
     &:first-letter {
       color: #ff4f49;
     }
+  }
+  @media (max-width: 768px) {
+    display: flex;
+    flex-wrap: wrap;
   }
 }
 </style>

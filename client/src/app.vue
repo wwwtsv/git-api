@@ -15,6 +15,11 @@ export default defineComponent({
         ? store.dispatch(AppStateActions.SetDeviceType, DeviceType.Desktop)
         : store.dispatch(AppStateActions.SetDeviceType, DeviceType.Mobile);
     };
+
+    if (window.screen.availWidth <= 768) {
+      store.dispatch(AppStateActions.SetDeviceType, DeviceType.Mobile);
+    }
+
     if (window) {
       window.addEventListener("resize", resizeHandler);
     }

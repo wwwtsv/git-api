@@ -67,6 +67,9 @@ export default defineComponent({
   gap: 40px;
   border-bottom: 1px solid #f0f2f3;
   padding: 0 34px;
+  @media (max-width: 768px) {
+    padding: 0 16px;
+  }
 }
 
 .slide-enter-active {

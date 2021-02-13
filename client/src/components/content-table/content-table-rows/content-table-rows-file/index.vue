@@ -45,5 +45,8 @@ export default defineComponent({
     position: absolute;
     left: 4px;
   }
+  @media (max-width: 768px) {
+    padding-left: 36px;
+  }
 }
 </style>

@@ -54,6 +54,9 @@ export default defineComponent({
       color: #1774e9;
       text-decoration: underline;
     }
+    @media (max-width: 768px) {
+      padding-left: 36px;
+    }
   }
 }
 </style>
