@@ -30,7 +30,7 @@ import { isEmpty } from "lodash";
 import { defineComponent, ref, PropType, watch, computed } from "vue";
 import { useStore } from "@app/store";
 import { AppStateActions } from "@app/store/modules/app-state/types/app-state";
-import BaseLoading from "@components/base-loading";
+import BaseLoading from "@components/base-loading/index.vue";
 import { onBeforeRouteUpdate } from "vue-router";
 
 export default defineComponent({

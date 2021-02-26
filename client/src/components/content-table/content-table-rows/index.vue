@@ -36,7 +36,7 @@ import { computed, defineComponent, PropType } from "vue";
 import { useRoute } from "vue-router";
 import { useStore } from "@app/store";
 import { BranchListElem, DeviceType, FileListElem } from "@app/store/modules/app-state/types/app-state";
-import BaseLoading from "@components/base-loading";
+import BaseLoading from "@components/base-loading/index.vue";
 import ContentTableRowsMobile from "@components/content-table/content-table-rows/mobile-template/index.vue";
 import ContentTableRowsFolder from "@components/content-table/content-table-rows/content-table-rows-folder/index.vue";
 import ContentTableRowsFile from "@components/content-table/content-table-rows/content-table-rows-file/index.vue";

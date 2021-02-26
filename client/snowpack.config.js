@@ -3,9 +3,7 @@ module.exports = {
     "@components": "./src/components",
     "@app": "./src",
   },
-  experiments: {
-    routes: [{ src: ".*", dest: "/index.html", match: "routes" }],
-  },
+  routes: [{ src: ".*", dest: "/index.html", match: "routes" }],
   mount: {
     public: { url: "/", static: true },
     src: { url: "/dist" },
